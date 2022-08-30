@@ -28,7 +28,6 @@ static int _MDInReliefID 	   	      = MFUnset;
 static int _MDInAirTempAcc_timeID     = MFUnset;
 static int _MDInTimeStepsID 	      = MFUnset;
 static int _MDInIceCoverID 	   	      = MFUnset;
-static int _MDInSmallResCapacityID    = MFUnset;
 static int _MDInBQART_LithologyID     = MFUnset;
 static int _MDInBQART_GNPID	   	      = MFUnset;
 static int _MDInPopulationID	      = MFUnset;
@@ -73,8 +72,7 @@ static void _MDSedimentFlux (int itemID) {
 	float A, R;
 	float Ag;
 	float tmp,TupSlop,PixSize_km2;
-	float ResCapacity, ResCapacityAcc, TeQacc ,deltaTau,upStreamResCapacity,LargeResCapacity,SmallRecCapacity;
-//	float SmallRecCapacity;
+	float ResCapacity, ResCapacityAcc, TeQacc ,deltaTau,upStreamResCapacity,LargeResCapacity;
 	float PopulationAcc,PopuDesity, MeanGNP,GNPAreaAcc;
 	static float dailyRand, yearlyRand;
 //	static int tmpTimeStep,tempTimeStep;
@@ -106,8 +104,7 @@ static void _MDSedimentFlux (int itemID) {
 	MFVarSetFloat (_MDInAirTempAcc_spaceID, itemID, Tacc);
 
 // Accumulate time steps
-	TimeStep = MFVarGetInt (_MDInTimeStepsID, itemID, 0) + 1;
-	MFVarSetInt (_MDInTimeStepsID, itemID, TimeStep); //	!!! Chnaged for constant 7/10/10
+	TimeStep = MFVarGetInt (_MDInTimeStepsID, itemID, 0);
 	MFVarSetFloat (_MDOutBQART_AID, itemID, A);
 	MFVarSetFloat (_MDOutBQART_RID, itemID, R);
 //Calculate moving avarege temperature (Tbar) and discharge
@@ -139,11 +136,9 @@ static void _MDSedimentFlux (int itemID) {
 		ResCapacity = 0.0;
 		ResCapacityAcc = 0.0;
 		//TeQacc = 0.0;
-		SmallRecCapacity = MFVarGetFloat (_MDInSmallResCapacityID, itemID, 0.0)/(pow(1000,3)); //convert from m3 to km3
-		if (SmallRecCapacity < 0) SmallRecCapacity = 0.00;
 		LargeResCapacity = MFVarGetFloat (_MDInResCapacityID,	   itemID, 0.0);
 		if (LargeResCapacity < 0.0001) LargeResCapacity = 0.0000000;
-		ResCapacity = SmallRecCapacity + LargeResCapacity;
+		ResCapacity = LargeResCapacity;
 		//ResCapacity = LargeResCapacity;
 		if (ResCapacity < 0) ResCapacity = 0.00;
 	
@@ -304,11 +299,10 @@ int MDSediment_FluxDef() {
 	MFDefEntering ("SedimentFlux");
 	
 	if (((_MDInDischargeID 		     = MDRouting_DischargeDef ())          == CMfailed) ||
-		((_MDInSmallResCapacityID    = MDReservoir_FarmPondCapacityDef ()) == CMfailed) ||
-	    ((_MDInDischMeanID 		     = MDAux_MeanDischargeDef ())          == CMfailed) ||
+	    ((_MDInDischMeanID 		     = MDAux_DischargeMeanDef ())          == CMfailed) ||
 	    ((_MDInAirTempID             = MDCommon_AirTemperatureDef ())      == CMfailed) ||
+	    ((_MDInTimeStepsID           = MDAux_StepCounterDef ())            == CMfailed) ||
 	    ((_MDInAirTempAcc_timeID     = MFVarGetID (MDVarSediment_AirTemperatureAcc_time,    "degC",     MFOutput, MFState, MFInitial))  == CMfailed) ||
-	    ((_MDInTimeStepsID           = MFVarGetID (MDVarSediment_TimeSteps,                 MFNoUnit,   MFOutput, MFState, MFInitial))  == CMfailed) ||
 	    ((_MDInReliefID              = MFVarGetID (MDVarSediment_Relief,                    "m",        MFInput,  MFState, MFBoundary)) == CMfailed) ||
 	    ((_MDInIceCoverID            = MFVarGetID (MDVarCommon_IceCover,                    MFNoUnit,   MFInput,  MFState, MFBoundary)) == CMfailed) ||
 	    ((_MDInBQART_LithologyID     = MFVarGetID (MDVarSediment_BQART_Lithology,           MFNoUnit,   MFInput,  MFState, MFBoundary)) == CMfailed) ||

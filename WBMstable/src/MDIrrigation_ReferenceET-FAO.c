@@ -27,18 +27,18 @@ static int _MDInI0HDayID            = MFUnset;
 // Output
 static int _MDOutIrrRefEvapotransID = MFUnset;
 
-static void _MDIrrRefEvapotransFAO (int itemID) {
-/* day-night Penman-Monteith PE in mm for day */
+static void _MDIrrRefEvapotransFAO (int itemID) { // day-night Penman-Monteith PE in mm for day
 // Input
-//	float dayLen;  // daylength in fraction of day
- 	float i0hDay;  //  daily potential insolation on horizontal [MJ/m2]
-
-	float airT;    // air temperatur [degree C]
-	float airTMin; // daily minimum air temperature [degree C]
-	float airTMax; // daily maximum air temperature [degree C]
-	float solRad;  // daily solar radiation on horizontal [MJ/m2]
-	float vPress;  // daily average vapor pressure [kPa]
-	float wSpeed;  // average wind speed for the day [m/s]
+ 	float airT      = MFVarGetFloat (_MDInCommon_AtMeanID, itemID, 0.0); // air temperatur [degree C]
+	float airTMin   = MFVarGetFloat (_MDInAtMinID,         itemID, 0.0); // daily minimum air temperature [degree C]
+	float airTMax   = MFVarGetFloat (_MDInAtMaxID,         itemID, 0.0); // daily maximum air temperature [degree C]
+	float solRad    = MFVarGetFloat (_MDInSolRadID,        itemID, 0.0); // daily solar radiation on horizontal [MJ/m2]
+	float i0hDay    = MFVarGetFloat (_MDInI0HDayID,        itemID, 0.0); //  daily potential insolation on horizontal [MJ/m2]
+	float vPress    = MFVarGetFloat (_MDInVPressID,        itemID, 0.0) / 1000.0; // daily average vapor pressure [kPa]
+	float elevation = MFVarGetFloat (_MDInElevationID,     itemID, 0.0);
+	float wSpeed    = MFVarGetFloat (_MDInWSpeedID,        itemID, 0.0); // average wind speed for the day [m/s]
+// Output
+	float FAOEtp;
 // Local
 	float solNet;  // average net solar radiation for daytime [W/m2]
 	float es;      // vapor pressure at airT [kPa]
@@ -46,29 +46,15 @@ static void _MDIrrRefEvapotransFAO (int itemID) {
 	float es_max;  // vapor pressure at airT [kPa]
 	float delta;   // dEsat/dTair [kPa/K]
 	float psychometricConstant;
-	float FAOEtp;
 	float solNet_MJm2d;
 	float nom;
 	float denom;
 	float meanAirTemp;
 	float atmosPressure;
-	float elevation;
 	float nen;
 	float temp;
  
-//	dayLen    = MFVarGetFloat (_MDInDayLengthID,    itemID,0);
-	i0hDay    = MFVarGetFloat (_MDInI0HDayID,       itemID,0);
-	elevation = MFVarGetFloat (_MDInElevationID,    itemID,0); 
-	airT      = MFVarGetFloat (_MDInCommon_AtMeanID,       itemID,0);
-	 
-	solRad    = MFVarGetFloat (_MDInSolRadID,       itemID,0);
-	vPress    = MFVarGetFloat (_MDInVPressID,       itemID,0);
-	wSpeed    = fabs (MFVarGetFloat (_MDInWSpeedID, itemID,0));
-	if (wSpeed < 0.2) wSpeed = 0.2;
-	
-	airTMin = MFVarGetFloat (_MDInAtMinID,        itemID,  0.0);
-	airTMax = MFVarGetFloat (_MDInAtMaxID,        itemID,  0.0);
-	
+	if (wSpeed < 0.2) wSpeed = 0.2;	
 	atmosPressure = (293.0 - 0.0065 * elevation) / 293.0;
 	atmosPressure = pow (atmosPressure, 5.26);
 	atmosPressure = atmosPressure * 101.3;
@@ -83,7 +69,7 @@ static void _MDIrrRefEvapotransFAO (int itemID) {
 	nen          = 4098 * (0.6108 * exp (17.27 * airT / (airT + 237.3)));
 	delta        = nen / ((airT + 237.3)*(airT + 237.3));
 
- 	temp         = es-vPress;
+ 	temp         = es - vPress;
 	nom          = 0.408 * delta * solNet_MJm2d + psychometricConstant * 900 / (273.3 + airT) * wSpeed * temp; 
 	//FBM nimmt vapor pressure in kPA!
 	denom = delta + psychometricConstant*(1+0.34 * wSpeed);
@@ -100,12 +86,12 @@ int MDIrrigation_ReferenceETFAODef () {
         ((_MDInI0HDayID            = MDCommon_SolarRadI0HDayDef ())    == CMfailed) ||
         ((_MDInSolRadID            = MDCommon_SolarRadDef ())          == CMfailed) ||
         ((_MDInCommon_AtMeanID     = MDCommon_AirTemperatureDef ())    == CMfailed) ||
-        ((_MDInElevationID         = MFVarGetID (MDVarCommon_Elevation,         "m",    MFInput,  MFState, MFBoundary)) == CMfailed) ||
-        ((_MDInAtMinID             = MFVarGetID (MDVarCommon_AirTempMinimum,    "degC", MFInput,  MFState, MFBoundary)) == CMfailed) ||
-        ((_MDInAtMaxID             = MFVarGetID (MDVarCommon_AirTempMaximum,    "degC", MFInput,  MFState, MFBoundary)) == CMfailed) ||
-        ((_MDInVPressID            = MFVarGetID (MDVarCore_VaporPressure,       "kPa",  MFInput,  MFState, MFBoundary)) == CMfailed) ||
-        ((_MDInWSpeedID            = MFVarGetID (MDVarCommon_WindSpeed,         "m/s",  MFInput,  MFState, MFBoundary)) == CMfailed) ||
-        ((_MDOutIrrRefEvapotransID = MFVarGetID (MDVarIrrigation_RefEvapotrans, "mm",   MFOutput, MFFlux,  MFBoundary)) == CMfailed)) return (CMfailed);
+        ((_MDInElevationID         = MFVarGetID (MDVarCommon_Elevation,             "m",    MFInput,  MFState, MFBoundary)) == CMfailed) ||
+        ((_MDInAtMinID             = MFVarGetID (MDVarCommon_AirTempMinimum,        "degC", MFInput,  MFState, MFBoundary)) == CMfailed) ||
+        ((_MDInAtMaxID             = MFVarGetID (MDVarCommon_AirTempMaximum,        "degC", MFInput,  MFState, MFBoundary)) == CMfailed) ||
+        ((_MDInVPressID            = MFVarGetID (MDVarCommon_HumidityVaporPressure, "Pa",   MFInput,  MFState, MFBoundary)) == CMfailed) ||
+        ((_MDInWSpeedID            = MFVarGetID (MDVarCommon_WindSpeed,             "m/s",  MFInput,  MFState, MFBoundary)) == CMfailed) ||
+        ((_MDOutIrrRefEvapotransID = MFVarGetID (MDVarIrrigation_RefEvapotrans,     "mm",   MFOutput, MFFlux,  MFBoundary)) == CMfailed)) return (CMfailed);
     if (MFModelAddFunction (_MDIrrRefEvapotransFAO)== CMfailed) return (CMfailed);
 
 	MFDefLeaving ("Irrigation Reference ETP (FAO)");

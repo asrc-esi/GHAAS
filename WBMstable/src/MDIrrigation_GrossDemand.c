@@ -34,7 +34,6 @@ static MDIrrigatedCrop *_MDirrigCropStruct = (MDIrrigatedCrop *) NULL;
 static int  _MDInIrrigation_AreaFracID  = MFUnset;
 static int *_MDInCropFractionIDs        = (int *) NULL;
 static int  _MDInCommon_PrecipID        = MFUnset;
-static int  _MDInSPackChgID             = MFUnset;
 static int  _MDInIrrRefEvapotransID     = MFUnset;
 static int  _MDInFldCapaID              = MFUnset;
 static int  _MDInWltPntID               = MFUnset;
@@ -183,7 +182,6 @@ static int _MDIrrReadCropParameters (const char *filename) {
 static void _MDIrrGrossDemand (int itemID) {
 //Input
 	float precip;
-	float snowpackChg;
 	float wltPnt;
 	float fldCap;
 	float irrAreaFrac;
@@ -218,7 +216,7 @@ static void _MDIrrGrossDemand (int itemID) {
 
 	irrAreaFrac = MFVarGetFloat (_MDInIrrigation_AreaFracID, itemID, 0.0);
 	
-	if (0.0 < irrAreaFrac) {
+	if (irrAreaFrac > 0.0) {
         irrCropETP = irrNetDemand = irrGrossDemand = irrRunoff = irrReturnFlow = irrSMoist = irrSMoistChg = sumOfCropFractions = 0.0;
 		for (cropID = 0; cropID < _MDNumberOfIrrCrops; ++cropID) {
 			cropFraction [cropID] = MFVarGetFloat (_MDInCropFractionIDs [cropID],itemID, 0.0);
@@ -234,8 +232,7 @@ static void _MDIrrGrossDemand (int itemID) {
 		irrEfficiency       = MFVarGetFloat (_MDInIrrEfficiencyID,       itemID,  38.00);
         seasStart [0]       = MFVarGetFloat (_MDInGrowingSeason1ID,      itemID, -100);
         seasStart [1]       = MFVarGetFloat (_MDInGrowingSeason2ID,      itemID, -100);
-		precip              = MFVarGetFloat (_MDInCommon_PrecipID,              itemID,   0.00);
-		snowpackChg         = MFVarGetFloat (_MDInSPackChgID,            itemID,   0.00);
+		precip              = MFVarGetFloat (_MDInCommon_PrecipID,       itemID,   0.00);
         ricePondingDepth    = MFVarGetFloat (_MDInRicePondingDepthID,    itemID,   2.00);
 	 	ricePercolation     = MFVarGetFloat (_MDInRicePercolationRateID, itemID,   3.00);
 	 	wltPnt              = MFVarGetFloat (_MDInWltPntID,              itemID,   0.15);
@@ -246,7 +243,6 @@ static void _MDIrrGrossDemand (int itemID) {
 		if (2.0 < irrIntensity)    irrIntensity =  2.0; // TODO irrIntensity dictates cropping seasons this limits it to 2
 		if (0.0 >= fldCap) { fldCap = 0.35; wltPnt = 0.2; }
 
-		precip = 0.0 >= snowpackChg ? precip + fabs (snowpackChg) : 0.0;
 		numGrowingSeasons = ceil (irrIntensity);
 		for (cropID = 0; cropID <= _MDNumberOfIrrCrops; ++cropID) {
 			daysSincePlanted = _MDIrrDaysSincePlanting (curDay, numGrowingSeasons, seasStart, cropID);
@@ -360,13 +356,12 @@ int MDIrrigation_GrossDemandDef () {
 	MFDefEntering ("Irrigation Gross Demand");
 	if ((optStr = MFOptionGet (MDOptConfig_Irrigation)) != (char *) NULL) optID = CMoptLookup (MFcalcOptions,optStr,true);
 	switch (optID) {
-		default:     MFOptionMessage (MDOptConfig_Irrigation, optStr, MFcalcOptions); return (CMfailed);
-		case MFhelp: MFOptionMessage (MDOptConfig_Irrigation, optStr, MFcalcOptions);
+		default:
+		case MFhelp: MFOptionMessage (MDOptConfig_Irrigation, optStr, MFcalcOptions); return (CMfailed);
 		case MFnone: break;
 		case MFinput: _MDOutIrrGrossDemandID = MFVarGetID (MDVarIrrigation_GrossDemand, "mm", MFInput, MFFlux, MFBoundary); break;
 		case MFcalculate:
 			if (((_MDInCommon_PrecipID       = MDCommon_PrecipitationDef ())   == CMfailed) ||
-                ((_MDInSPackChgID            = MDCore_SnowPackChgDef ())       == CMfailed) ||
                 ((_MDInIrrRefEvapotransID    = MDIrrigation_ReferenceETDef ()) == CMfailed) ||
                 ((_MDInIrrigation_AreaFracID = MDIrrigation_IrrAreaDef ())     == CMfailed) ||
                 ((_MDInIrrIntensityID        = MFVarGetID (MDVarIrrigation_Intensity,               MFNoUnit, MFInput,  MFState, MFBoundary)) == CMfailed) ||
@@ -411,5 +406,6 @@ int MDIrrigation_GrossDemandDef () {
 	return (_MDOutIrrGrossDemandID);
 }
 
-int MDIrrigation_ReturnFlowDef () { MDIrrigation_GrossDemandDef (); return (_MDOutIrrReturnFlowID); }
-int MDIrrigation_RunoffDef ()     { MDIrrigation_GrossDemandDef (); return (_MDOutIrrRunoffID); }
+int MDIrrigation_EvapotranspirationDef () { MDIrrigation_GrossDemandDef (); return (_MDOutIrrEvapotranspID); }
+int MDIrrigation_ReturnFlowDef ()         { MDIrrigation_GrossDemandDef (); return (_MDOutIrrReturnFlowID); }
+int MDIrrigation_RunoffDef ()             { MDIrrigation_GrossDemandDef (); return (_MDOutIrrRunoffID); }

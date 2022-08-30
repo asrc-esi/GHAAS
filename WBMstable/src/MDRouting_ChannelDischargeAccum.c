@@ -14,37 +14,34 @@ bfekete@gc.cuny.edu
 #include <MD.h>
 
 // Input
-static int _MDInAux_RunoffVolumeID      = MFUnset;
+static int _MDInCore_RunoffVolumeID      = MFUnset;
 static int _MDInRouting_DischargeID     = MFUnset;
 // Output
-static int _MDOutRouting_DischLevel3ID  = MFUnset;
+static int _MDOutRouting_DischargeIntID = MFUnset;
 static int _MDOutRouting_RiverStorChgID = MFUnset;
-static int _MDOutAux_RiverStorageID = MFUnset;
+static int _MDOutRouting_RiverStorageID = MFUnset;
 
 static void _MDDischLevel3Accumulate (int itemID) {
 // Input
-	float runoff;     // Local runoff volume [m3/s]
-	float discharge;  // Discharge from upstream [m3/s]
+	float runoff    = MFVarGetFloat(_MDInCore_RunoffVolumeID, itemID, 0.0); // Local runoff volume [m3/s]
+	float discharge = MFVarGetFloat(_MDInRouting_DischargeID, itemID, 0.0); // Discharge from upstream [m3/s]
 
-	runoff    = MFVarGetFloat(_MDInAux_RunoffVolumeID, itemID, 0.0);
-	discharge = MFVarGetFloat(_MDInRouting_DischargeID,    itemID, 0.0);
-
-	MFVarSetFloat (_MDOutRouting_DischLevel3ID, itemID, discharge + runoff);
+	MFVarSetFloat (_MDOutRouting_DischargeIntID, itemID, discharge + runoff);
 	MFVarSetFloat (_MDOutRouting_RiverStorChgID, itemID, 0.0);
-	MFVarSetFloat (_MDOutAux_RiverStorageID, itemID, 0.0);
+	MFVarSetFloat (_MDOutRouting_RiverStorageID, itemID, 0.0);
 }
 
-int MDRouting_DischargeInChannelAccumulateDef () {
+int MDRouting_ChannelDischargeAccumulateDef () {
 
-	if (_MDOutRouting_DischLevel3ID != MFUnset) return (_MDOutRouting_DischLevel3ID);
+	if (_MDOutRouting_DischargeIntID != MFUnset) return (_MDOutRouting_DischargeIntID);
 
 	MFDefEntering ("Discharge Routing - Accumulate");
-	if (((_MDInAux_RunoffVolumeID  = MDCore_RunoffVolumeDef()) == CMfailed) ||
-        ((_MDInRouting_DischargeID     = MFVarGetID (MDVarRouting_Discharge,       "m3/s", MFInput,  MFState, MFInitial))  == CMfailed) ||
-        ((_MDOutRouting_DischLevel3ID  = MFVarGetID ("__DischLevel3",              "m3/s", MFOutput, MFState, MFBoundary)) == CMfailed) ||
+	if (((_MDInCore_RunoffVolumeID     = MDCore_RunoffFlowDef()) == CMfailed) ||
+        ((_MDInRouting_DischargeID     = MFVarGetID (MDVarRouting_Discharge,       "m3/s", MFRoute,  MFState, MFInitial))  == CMfailed) ||
+        ((_MDOutRouting_DischargeIntID = MFVarGetID ("__DischargeInternal",        "m3/s", MFOutput, MFState, MFBoundary)) == CMfailed) ||
         ((_MDOutRouting_RiverStorChgID = MFVarGetID (MDVarRouting_RiverStorageChg, "m3",   MFOutput, MFFlux,  MFBoundary)) == CMfailed) ||
-        ((_MDOutAux_RiverStorageID     = MFVarGetID (MDVarRouting_RiverStorage,    "m3",   MFOutput, MFState, MFInitial))  == CMfailed) ||
+        ((_MDOutRouting_RiverStorageID = MFVarGetID (MDVarRouting_RiverStorage,    "m3",   MFOutput, MFState, MFInitial))  == CMfailed) ||
         (MFModelAddFunction (_MDDischLevel3Accumulate) == CMfailed)) return CMfailed;
 	MFDefLeaving ("Discharge Routing - Accumulate");
-	return (_MDOutRouting_DischLevel3ID);
+	return (_MDOutRouting_DischargeIntID);
 }

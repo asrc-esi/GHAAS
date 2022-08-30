@@ -24,16 +24,13 @@ static int _MDInGrowingSeason2ID     = MFUnset;
 static int _MDOutIrrigatedAreaFracID = MFUnset; 
 
 static void _MDIrrigatedAreaIWMI (int itemID) {
+// Input
+	float irrAreaFracSeason1 = MFVarGetFloat(_MDInIrrAreaFracSeason1ID, itemID, 0.0);
+	float irrAreaFracSeason2 = MFVarGetFloat(_MDInIrrAreaFracSeason2ID, itemID, 0.0);
+	float Season1Doy         = MFVarGetFloat(_MDInGrowingSeason1ID,     itemID, 100);
+	float Season2Doy         = MFVarGetFloat(_MDInGrowingSeason2ID,     itemID, 250);
+// Output
 	float irrAreaFrac;	
-	float irrAreaFracSeason1;
-	float irrAreaFracSeason2;
-	float Season1Doy;
-	float Season2Doy;
-
-	Season1Doy= MFVarGetFloat(_MDInGrowingSeason1ID,      itemID, 100);
-	Season2Doy= MFVarGetFloat(_MDInGrowingSeason2ID,      itemID, 250);
-	irrAreaFracSeason1 = MFVarGetFloat(_MDInIrrAreaFracSeason1ID, itemID, 0.0);
-	irrAreaFracSeason2 = MFVarGetFloat(_MDInIrrAreaFracSeason2ID, itemID, 0.0);
 
 	if (Season1Doy < Season2Doy) {
 		if      (MFDateGetDayOfYear () < Season1Doy) irrAreaFrac = irrAreaFracSeason2;
@@ -62,11 +59,11 @@ int MDIrrigation_IrrAreaDef () {
 	if ((optStr = MFOptionGet (MDOptIrrigation_AreaMap)) != (char *) NULL) optID = CMoptLookup (options, optStr, true);
 
 	switch (optID) {
-        default:      MFOptionMessage (MDOptIrrigation_AreaMap, optStr, options); return (CMfailed);
-		case MDhelp:  MFOptionMessage (MDOptIrrigation_AreaMap, optStr, options);
-        case MDfao:
-            if ((_MDOutIrrigatedAreaFracID = MFVarGetID (MDVarIrrigation_AreaFraction, MFNoUnit, MFInput, MFState, MFBoundary)) == CMfailed) return (CMfailed);
-            break;
+        default:
+		case MDhelp:  MFOptionMessage (MDOptIrrigation_AreaMap, optStr, options); return (CMfailed);
+      case MDfao:
+      	if ((_MDOutIrrigatedAreaFracID = MFVarGetID (MDVarIrrigation_AreaFraction, MFNoUnit, MFInput, MFState, MFBoundary)) == CMfailed) return (CMfailed);
+			break;
 		case MDiwmi:
 		    if (((_MDInIrrAreaFracSeason1ID = MFVarGetID (MDVarIrrigation_AreaFractionSeason1, MFNoUnit, MFInput,  MFState, MFBoundary)) == CMfailed) ||
                 ((_MDInIrrAreaFracSeason2ID = MFVarGetID (MDVarIrrigation_AreaFractionSeason2, MFNoUnit, MFInput,  MFState, MFBoundary)) == CMfailed) ||

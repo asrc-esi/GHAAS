@@ -14,14 +14,20 @@ bfekete@gc.cuny.edu
 #include <MD.h>
 
 //Input;
-static int _MDInCommon_PrecipID     = MFUnset;
+static int _MDInCommon_PrecipID  = MFUnset;
 //Output
 static int _MDOutAux_AccPrecipID = MFUnset;
 
 static void _MDAux_AccumPrecip (int itemID) {
-	float accum, value;
+// Model
+    float dt            = MFModelGet_dt ();
+    float cellArea      = MFModelGetArea (itemID);
+// Input
+	float value;
+// Output
+	float accum;
 	
-	value = MFVarGetFloat (_MDInCommon_PrecipID,  itemID, 0.0) * MFModelGetArea (itemID) / (MFModelGet_dt () * 1000.0); // Converting to m3/s
+	value = MFVarGetFloat (_MDInCommon_PrecipID,  itemID, 0.0) * cellArea / (dt * 1000.0); // Converting to m3/s
 	accum = MFVarGetFloat (_MDOutAux_AccPrecipID, itemID, 0.0);
 	MFVarSetFloat(_MDOutAux_AccPrecipID, itemID,accum + value);
 }
@@ -45,9 +51,15 @@ static int _MDInAux_EvapID      = MFUnset;
 static int _MDOutAux_AccEvapID  = MFUnset;
 
 static void _MDAux_AccumEvap (int itemID) {
-	float accum, value;
+// Model
+    float dt            = MFModelGet_dt ();
+    float cellArea      = MFModelGetArea (itemID);
+// Input
+	float value;
+// Output
+	float accum;
 	
-	value = MFVarGetFloat (_MDInAux_EvapID,     itemID, 0.0) * MFModelGetArea (itemID) / (MFModelGet_dt () * 1000.0); // Converting to m3/s
+	value = MFVarGetFloat (_MDInAux_EvapID,     itemID, 0.0) * cellArea / (dt * 1000.0); // Converting to m3/s
 	accum = MFVarGetFloat (_MDOutAux_AccEvapID, itemID, 0.0);
 	MFVarSetFloat(_MDOutAux_AccEvapID, itemID, accum + value);
 }
@@ -71,16 +83,22 @@ static int _MDInAux_SnowPackChgID     = MFUnset;
 static int _MDOutAux_AccSnowPackChgID = MFUnset;
 
 static void _MDAux_AccumSnowPackChage (int itemID) {
-	float accum, value;
+// Model
+    float dt            = MFModelGet_dt ();
+    float cellArea      = MFModelGetArea (itemID);
+// Input
+	float value;
+// Output
+	float accum;
 	
-	value = MFVarGetFloat (_MDInAux_SnowPackChgID,     itemID, 0.0) * MFModelGetArea (itemID) / (MFModelGet_dt () * 1000.0); // Converting to m3/s
+	value = MFVarGetFloat (_MDInAux_SnowPackChgID,     itemID, 0.0) * cellArea / (dt * 1000.0); // Converting to m3/s
 	accum = MFVarGetFloat (_MDOutAux_AccSnowPackChgID, itemID, 0.0);
 	MFVarSetFloat(_MDOutAux_AccSnowPackChgID, itemID, accum + value);
 }
 
 int MDAux_AccumSnowPackChgDef() {
 
-	if (_MDOutAux_AccEvapID != MFUnset) return (_MDOutAux_AccEvapID);
+	if (_MDOutAux_AccSnowPackChgID != MFUnset) return (_MDOutAux_AccSnowPackChgID);
 
 	MFDefEntering ("Accumulate Snowpack Change");
 	if (((_MDInAux_SnowPackChgID     = MDCore_SnowPackChgDef ()) == CMfailed) ||
@@ -97,9 +115,15 @@ static int _MDInAux_SMoistChgID     = MFUnset;
 static int _MDOutAux_AccSMoistChgID = MFUnset;
 
 static void _MDAux_AccumSMoistChg (int itemID) {
-	float accum, value;
+// Model
+    float dt            = MFModelGet_dt ();
+    float cellArea      = MFModelGetArea (itemID);
+// Input
+	float value;
+// Output
+	float accum;
 	
-	value = MFVarGetFloat (_MDInAux_SMoistChgID,     itemID, 0.0) * MFModelGetArea (itemID) / (MFModelGet_dt () * 1000.0); // Converting to m3/s
+	value = MFVarGetFloat (_MDInAux_SMoistChgID,     itemID, 0.0) * cellArea / (dt * 1000.0); // Converting to m3/s
 	accum = MFVarGetFloat (_MDOutAux_AccSMoistChgID, itemID, 0.0);
 	MFVarSetFloat(_MDOutAux_AccSMoistChgID, itemID, accum + value);
 }
@@ -123,9 +147,15 @@ static int _MDInAux_GrdWatChgID     = MFUnset;
 static int _MDOutAux_AccGrdWatChgID = MFUnset;
 
 static void _MDAux_AccumGrdWatChg (int itemID) {
-	float accum, value;
+// Model
+    float dt            = MFModelGet_dt ();
+    float cellArea      = MFModelGetArea (itemID);
+// Input
+	float value;
+// Output
+	float accum;
 
-	value = MFVarGetFloat (_MDInAux_GrdWatChgID,     itemID, 0.0) * MFModelGetArea (itemID) / (MFModelGet_dt () * 1000.0); // Converting to m3/s
+	value = MFVarGetFloat (_MDInAux_GrdWatChgID,     itemID, 0.0) * cellArea / (dt * 1000.0); // Converting to m3/s
 	accum = MFVarGetFloat (_MDOutAux_AccGrdWatChgID, itemID, 0.0);
 	MFVarSetFloat(_MDOutAux_AccGrdWatChgID, itemID, accum + value);
 }
@@ -135,7 +165,7 @@ int MDAux_AccumGrdWatChgDef() {
 	if (_MDOutAux_AccGrdWatChgID != MFUnset) return (_MDOutAux_AccGrdWatChgID);
 
 	MFDefEntering ("Accumulate Groundwater Change");
-	if (((_MDInAux_GrdWatChgID     = MFVarGetID (MDVarCore_GroundWaterChange,   "mm",   MFInput, MFFlux,  MFBoundary)) == CMfailed) ||
+	if (((_MDInAux_GrdWatChgID     = MDCore_GroundWaterChangeDef ()) == CMfailed) ||
         ((_MDOutAux_AccGrdWatChgID = MFVarGetID (MDVarAux_AccGroundWaterChange, "m3/s", MFRoute, MFState, MFBoundary)) == CMfailed) ||
         (MFModelAddFunction(_MDAux_AccumGrdWatChg) == CMfailed)) return (CMfailed);
 
@@ -144,16 +174,18 @@ int MDAux_AccumGrdWatChgDef() {
 }
 
 //Input;
-static int _MDInCore_RunoffVolumeID  = MFUnset;
+static int _MDInCore_RunoffFlowID     = MFUnset;
 //Output
-static int _MDOutAux_AccCore_RunoffID    = MFUnset;
+static int _MDOutAux_AccCore_RunoffID = MFUnset;
 
 static void _MDAux_AccumRunoff (int itemID) {
-	float accum, value;
+// Input
+	float value;
+// Output
+	float accum;
 
-	value = MFVarGetFloat (_MDInCore_RunoffVolumeID,   itemID, 0.0);
+	value = MFVarGetFloat (_MDInCore_RunoffFlowID,     itemID, 0.0);
 	accum = MFVarGetFloat (_MDOutAux_AccCore_RunoffID, itemID, 0.0);
-
 	MFVarSetFloat(_MDOutAux_AccCore_RunoffID, itemID, accum + value);
 }
 
@@ -162,10 +194,41 @@ int MDAux_AccumRunoffDef() {
 	if (_MDOutAux_AccCore_RunoffID != MFUnset) return (_MDOutAux_AccCore_RunoffID);
 
 	MFDefEntering ("Accumulate Runoff");
-	if (((_MDInCore_RunoffVolumeID   = MDCore_RunoffVolumeDef()) == CMfailed) ||
+	if (((_MDInCore_RunoffFlowID     = MDCore_RunoffFlowDef()) == CMfailed) ||
         ((_MDOutAux_AccCore_RunoffID = MFVarGetID (MDVarAux_AccRunoff, "m3/s", MFRoute, MFState, MFBoundary)) == CMfailed) ||
         (MFModelAddFunction(_MDAux_AccumRunoff) == CMfailed)) return (CMfailed);
 
 	MFDefLeaving ("Accumulate Runoff");
 	return (_MDOutAux_AccCore_RunoffID);	
+}
+
+//Input;
+static int _MDInCore_RiverStorageChgID    = MFUnset;
+//Output
+static int _MDOutAux_AccRiverStorageChgID = MFUnset;
+
+static void _MDAux_AccumRiverStorageChg (int itemID) {
+// Model
+	float dt = MFModelGet_dt ();
+// Input
+	float value;
+// Output
+	float accum;
+
+	value = MFVarGetFloat (_MDInCore_RiverStorageChgID,    itemID, 0.0) / dt;
+	accum = MFVarGetFloat (_MDOutAux_AccRiverStorageChgID, itemID, 0.0);
+
+	MFVarSetFloat(_MDOutAux_AccRiverStorageChgID, itemID, accum + value);
+}
+
+int MDAux_AccumRiverStorageChg () {
+
+	if (_MDOutAux_AccRiverStorageChgID != MFUnset) return (_MDOutAux_AccRiverStorageChgID);
+
+	MFDefEntering ("Accumulate River Storage Change");
+	if (((_MDInCore_RiverStorageChgID    = MDRouting_ChannelStorageChgDef()) == CMfailed) ||
+        ((_MDOutAux_AccRiverStorageChgID = MFVarGetID (MDVarAux_AccRiverStorageChg, "m3/s", MFRoute, MFState, MFBoundary)) == CMfailed) ||
+        (MFModelAddFunction(_MDAux_AccumRiverStorageChg) == CMfailed)) return (CMfailed);
+	MFDefLeaving ("Accumulate River Storage Change");
+	return (_MDOutAux_AccRiverStorageChgID);	
 }

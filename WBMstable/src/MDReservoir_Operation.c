@@ -108,7 +108,7 @@ static void _MDReservoirSNL (int itemID) {
 	float irrDemandDailyMean;     // irrigational long-term mean daily water demand [m3/s]
 	float irrDemandAnnualMean;    // irrigational long-term mean annual water demand [m3/s]
 	float resCapacity;            // Reservoir capacity [km3]
-	float resInitStorage;         // Reference storage dictating actual release ratio [km3]
+	float resInitStorage;         // Reference storage dictatink actual release ratio [km3]
 // Output
 	float resStorage    = 0.0;    // Reservoir storage [km3]
 	float resStorageChg = 0.0;    // Reservoir storage change [km3/dt]
@@ -196,12 +196,12 @@ int MDReservoir_OperationDef () {
 	MFDefEntering ("Reservoirs");
 	if ((optStr = MFOptionGet (MDVarReservoir_Release)) != (char *) NULL) optID = CMoptLookup (options, optStr, true);
  	switch (optID) {
-		default:     MFOptionMessage (MDVarReservoir_Release, optStr, options); return (CMfailed);
-		case MDhelp: MFOptionMessage (MDVarReservoir_Release, optStr, options);
+		default:
+		case MDhelp: MFOptionMessage (MDVarReservoir_Release, optStr, options); return (CMfailed);
 		case MDwisser:
-			if (((_MDInRouting_DischargeID      = MDRouting_DischargeInChannelDef()) == CMfailed) ||
+			if (((_MDInRouting_DischargeID      = MDRouting_ChannelDischargeDef())   == CMfailed) ||
 				((_MDInResUptakeID              = MDReservoir_UptakeDef ())          == CMfailed) ||
-				((_MDInAux_MeanDischargeID      = MDAux_MeanDischargeDef ())         == CMfailed) ||
+				((_MDInAux_MeanDischargeID      = MDAux_DischargeMeanDef ())         == CMfailed) ||
             	((_MDInResCapacityID            = MFVarGetID (MDVarReservoir_Capacity,           "km3",  MFInput,  MFState, MFBoundary)) == CMfailed) ||
                 ((_MDOutResStorageID            = MFVarGetID (MDVarReservoir_Storage,            "km3",  MFOutput, MFState, MFInitial))  == CMfailed) ||
                 ((_MDOutResStorageChgID         = MFVarGetID (MDVarReservoir_StorageChange,      "km3",  MFOutput, MFState, MFBoundary)) == CMfailed) ||
@@ -211,7 +211,7 @@ int MDReservoir_OperationDef () {
                 (MFModelAddFunction (_MDReservoirWisser) == CMfailed)) return (CMfailed);
 			break;
 		case MDsnl:
-			if (((_MDInRouting_DischargeID      = MDRouting_DischargeInChannelDef()) == CMfailed) ||
+			if (((_MDInRouting_DischargeID      = MDRouting_ChannelDischargeDef()) == CMfailed) ||
             	((_MDInResCapacityID            = MFVarGetID (MDVarReservoir_Capacity,               "km3",  MFInput,  MFState, MFBoundary)) == CMfailed) ||
 			    ((_MDInResNatInflowDailyMeanID  = MFVarGetID (MDVarReservoir_NatDMeanInflow,         "m3/s", MFInput,  MFState, MFBoundary)) == CMfailed) ||
 			    ((_MDInResNatInflowAnnualMeanID = MFVarGetID (MDVarReservoir_NatAMeanInflow,         "m3/s", MFInput,  MFState, MFBoundary)) == CMfailed) ||
@@ -227,9 +227,8 @@ int MDReservoir_OperationDef () {
 			    ((_MDOutResInflowID             = MFVarGetID (MDVarReservoir_Inflow,                 "m3/s", MFOutput, MFState, MFBoundary)) == CMfailed) ||
 			    ((_MDOutResTargetReleaseID      = MFVarGetID ("SNL_TargetRelease",                   "m3/s", MFOutput, MFState, MFBoundary)) == CMfailed) ||
 			    ((_MDOutResAttemptedReleaseID   = MFVarGetID ("SNL_AttemptedRelease",                "m3/s", MFOutput, MFState, MFBoundary)) == CMfailed) ||
-			    ((_MDOutResReleaseID            = MFVarGetID (MDVarReservoir_Release,                "m3/s", MFOutput, MFState, MFBoundary)) == CMfailed) ||
-			    ((_MDOutResReleaseID            = MFVarGetID (MDVarReservoir_Release,                "m3/s", MFOutput, MFState, MFBoundary)) == CMfailed) ||
  			    ((_MDOutResExtractableReleaseID = MFVarGetID (MDVarReservoir_ExtractableRelease,     "m3/s", MFRoute,  MFState, MFBoundary)) == CMfailed) ||
+			    ((_MDOutResReleaseID            = MFVarGetID (MDVarReservoir_Release,                "m3/s", MFOutput, MFState, MFBoundary)) == CMfailed) ||
                 (MFModelAddFunction (_MDReservoirSNL) == CMfailed)) return (CMfailed);
 			break;
 	}

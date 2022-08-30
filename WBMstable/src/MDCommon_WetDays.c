@@ -21,32 +21,22 @@ static int _MDInParam_WetDaysBetaID  = MFUnset;
 // Output
 static int _MDOutCommon_WetDaysID = MFUnset;
 
-static void _MDWetDays (int itemID)
-	{
+static void _MDWetDays (int itemID) {
+// Model
+	int nDays = MFDateGetMonthLength ();
 // Input
-	float precip;
-	float alpha;
-	float beta;
+	float precip = MFVarGetFloat (_MDInCommon_PrecipID,      itemID, 0.0);
+	float alpha  = MFVarGetFloat (_MDInParam_WetDaysAlphaID, itemID, 1.0);
+	float beta   = MFVarGetFloat (_MDInParam_WetDaysBetaID,  itemID, 0.0);
 // Output 
 	int wetDays;
-// Local 
-	int nDays;
-
-	if (MFVarTestMissingVal (_MDInCommon_PrecipID, itemID) ||
-        MFVarTestMissingVal (_MDInParam_WetDaysAlphaID, itemID) ||
-        MFVarTestMissingVal (_MDInParam_WetDaysBetaID, itemID)) { MFVarSetMissingVal (_MDOutCommon_WetDaysID, itemID); return; }
-
-	precip = MFVarGetFloat (_MDInCommon_PrecipID,      itemID, 0.0);
-	alpha  = MFVarGetFloat (_MDInParam_WetDaysAlphaID, itemID, 1.0);
-	beta   = MFVarGetFloat (_MDInParam_WetDaysBetaID,  itemID, 0.0);
-
-	nDays   = MFDateGetMonthLength ();
+   
 	wetDays = (int) ((float) nDays * alpha * (1.0 - exp ((double) (beta * precip))));
 	if (wetDays > nDays) wetDays = nDays;
 	if (wetDays < 1)     wetDays = 1;
 
 	MFVarSetInt (_MDOutCommon_WetDaysID,itemID,wetDays);
-	}
+}
 
 enum { MDhelp, MDinput, MDlbg };
 
@@ -61,8 +51,8 @@ int MDCommon_WetDaysDef ()
 	MFDefEntering ("Wet Days");
 	if ((optStr = MFOptionGet (MDVarCommon_WetDays)) != (char *) NULL) optID = CMoptLookup (options,optStr,true);
 	switch (optID) {
-		default:      MFOptionMessage (MDVarCommon_WetDays, optStr, options); return (CMfailed);
-		case MDhelp:  MFOptionMessage (MDVarCommon_WetDays, optStr, options);
+		default:
+		case MDhelp:  MFOptionMessage (MDVarCommon_WetDays, optStr, options); return (CMfailed);
 		case MDinput: _MDOutCommon_WetDaysID = MFVarGetID (MDVarCommon_WetDays, MFNoUnit, MFInput, MFState, MFBoundary); break;
 		case MDlbg:
 			if (((_MDInCommon_PrecipID      = MFVarGetID (MDVarCommon_PrecipMonthly, "mm",     MFInput,  MFFlux,  MFBoundary)) == CMfailed) ||

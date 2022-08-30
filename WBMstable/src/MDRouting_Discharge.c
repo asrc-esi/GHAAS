@@ -22,9 +22,7 @@ static int _MDInDataAssim_DischObservedID = MFUnset;
 static int _MDOutRouting_DischargeID      = MFUnset;
 
 static void _MDRouting_Discharge (int itemID) {
-	float discharge; // Discharge [m3/s]
-
-	discharge = MFVarGetFloat (_MDInRouting_DischargeID,   itemID, 0.0);
+	float discharge = MFVarGetFloat (_MDInRouting_DischargeID,   itemID, 0.0); // Discharge [m3/s]
 
 	if (_MDInDataAssim_DischObservedID != MFUnset)
 		 discharge = MFVarGetFloat (_MDInDataAssim_DischObservedID, itemID, discharge);
@@ -34,7 +32,7 @@ static void _MDRouting_Discharge (int itemID) {
 
 enum { MDhelp, MDinput, MDcalculate, MDcorrected };
 
-int MDRouting_DischargeDef() {
+int MDRouting_DischargeDef () {
 	int optID = MDinput;
 	const char *optStr;
 	const char *options [] = { MFhelpStr, MFinputStr, MFcalculateStr, "corrected", (char *) NULL };
@@ -42,15 +40,15 @@ int MDRouting_DischargeDef() {
 	if (_MDOutRouting_DischargeID != MFUnset) return (_MDOutRouting_DischargeID);
 
 	MFDefEntering ("Discharge");
-	if ((optStr = MFOptionGet (MDOptConfig_Discharge)) != (char *) NULL) optID = CMoptLookup (options,optStr,true);
+	if ((optStr = MFOptionGet (MDVarRouting_Discharge)) != (char *) NULL) optID = CMoptLookup (options,optStr,true);
 	switch (optID) {
-		default:      MFOptionMessage (MDOptConfig_Discharge, optStr, options); return (CMfailed);
-		case MDhelp:  MFOptionMessage (MDOptConfig_Discharge, optStr, options);
+		default:
+		case MDhelp:  MFOptionMessage (MDVarRouting_Discharge, optStr, options); return (CMfailed);
 		case MDinput: _MDOutRouting_DischargeID = MFVarGetID (MDVarRouting_Discharge, "m3/s", MFInput, MFState, MFInitial); break;
 		case MDcalculate:
-			if (((_MDOutRouting_DischargeID   = MFVarGetID (MDVarRouting_Discharge, "m3/s", MFRoute, MFState, MFInitial)) == CMfailed) ||
-				((_MDInRouting_DischargeID    = MDRouting_DischargeUptakeDef ()) == CMfailed) ||
-				((_MDInRouting_RiverWidthID   = MDRouting_RiverWidthDef ())      == CMfailed) ||
+			if (((_MDInRouting_DischargeID  = MDRouting_DischargeUptakeDef ()) == CMfailed) ||
+				((_MDInRouting_RiverWidthID = MDRouting_RiverWidthDef ())      == CMfailed) ||
+				((_MDOutRouting_DischargeID = MFVarGetID (MDVarRouting_Discharge, "m3/s", MFRoute, MFState, MFInitial)) == CMfailed) ||
                 (MFModelAddFunction(_MDRouting_Discharge) == CMfailed)) return (CMfailed);
 			break;
 		case MDcorrected:

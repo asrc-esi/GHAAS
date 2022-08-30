@@ -18,7 +18,6 @@ extern "C" {
 #endif
 
 // Configuration options
-#define MDOptConfig_Discharge                   "Discharge"
 #define MDOptConfig_Irrigation                  "Irrigation"
 #define MDOptConfig_Model                       "Model"
 #define MDOptConfig_Reservoirs                  "Reservoirs"
@@ -32,12 +31,6 @@ extern "C" {
 #define MDOptRouting_Muskingum                  "Muskingum"
 #define MDOptRouting_Riverbed                   "Riverbed"
 
-// Weather options
-#define MDOptWeather_CloudCover		            "CloudCover"
-#define MDOptWeather_SpecificHumidity           "SpecificHumidity"
-#define MDOptWeather_RelativeHumidity           "RelativeHumidity" //for wet bulb
-#define MDOptWeather_WetBulbTemp                "WetBulbTemp"
-
 // Constant parameters
 #define MDParGrossRadTAU                        "GrossRadTAU"
 #define MDParGroundWatBETA                      "GroundWaterBETA"
@@ -50,15 +43,17 @@ extern "C" {
 // Auxiliary variables
 #define MDVarAux_AccBalance                     "AccumBalance"
 #define MDVarAux_AccEvapotranspiration          "AccumEvapotranspiration"
-#define MDVarAux_AccSnowPackChange              "AccumSoilSnowPackChange"
 #define MDVarAux_AccSoilMoistChange             "AccumSoilMoistureChange"
+#define MDVarAux_AccSnowPackChange              "AccumSnowPackChange"
 #define MDVarAux_AccGroundWaterChange           "AccumGroundWaterChange"
 #define MDVarAux_AccPrecipitation               "AccumPrecipitation"
 #define MDVarAux_AccRunoff                      "AccumRunoff"
-#define MDVarAux_AvgNSteps                      "AverageNSteps"
-#define MDVarAux_DischMean                      "DischargeMean"
-#define MDVarAux_DischMin                       "MinimumLongTermInflow"
-#define MDVarAux_DischMax                       "MaximumLongTermInflow"
+#define MDVarAux_AccRiverStorageChg             "AccumRiverStorageChange"
+#define MDVarAux_AirTemperatureMean             "AirTemperatureMean"
+#define MDVarAux_DischargeMean                  "DischargeMean"
+#define MDVarAux_DischargeMin                   "MinimumLongTermInflow"
+#define MDVarAux_DischargeMax                   "MaximumLongTermInflow"
+#define MDVarAux_StepCounter                    "StepCounter"
 #define MDVarAux_YearCount                      "YearCount"
 
 // Common variables
@@ -70,8 +65,11 @@ extern "C" {
 #define MDVarCommon_AirTempMaximum              "AirTempMaximum"
 #define MDVarCommon_AirPressure                 "AirPressure"
 #define MDVarCommon_CloudCover		            "CloudCover"
+#define MDVarCommon_HumidityDewPointTemperature "DewPointTemperature"
+#define MDVarCommon_HumiditySaturatedVaporPress "SaturatedVaporPressure"
 #define MDVarCommon_HumiditySpecific            "SpecificHumidity"
 #define MDVarCommon_HumidityRelative            "RelativeHumidity"
+#define MDVarCommon_HumidityVaporPressure       "VaporPressure"
 #define MDVarCommon_IceCover		            "IceCover"
 #define	MDVarCommon_Elevation                   "Elevation"
 #define	MDVarCommon_ElevationMin                "ElevationMin"
@@ -114,7 +112,7 @@ extern "C" {
 #define MDVarCore_RelSoilMoisture               "RelativeSoilMoisture"
 #define MDVarCore_Runoff                        "Runoff"
 #define MDVarCore_RunoffMean                    "RunoffMean"
-#define MDVarCore_RunoffVolume                  "RunoffVolume"
+#define MDVarCore_RunoffFlow                    "RunoffFlow"
 #define MDVarCore_SnowMelt                      "SnowMelt"
 #define MDVarCore_SnowPack                      "SnowPack"
 #define MDVarCore_SnowPackChange                "SnowPackChange"
@@ -130,7 +128,6 @@ extern "C" {
 #define MDVarCore_StemAreaIndex                 "StemAreaIndex"
 #define MDVarCore_SunShine                      "SunShine"
 #define MDVarCore_SurfRunoff                    "SurfaceRunoff"
-#define MDVarCore_VaporPressure                 "VaporPressure"
 #define MDVarCore_WaterBalance                  "WaterBalance"
 
 // Data assimilation variables
@@ -165,13 +162,6 @@ extern "C" {
 #define MDVarIrrigation_RicePondingDepth        "RicePondingDepth"
 
 // Reservoir variables
-#define MDVarReservoir_FarmPondStorageFrac      "SmallReservoirStorageFraction"
-#define MDVarReservoir_FarmPondSmallResCapacity "SmallReservoirCapacity"
-#define MDVarReservoir_FarmPondRelease          "SmallReservoirRelease"
-#define MDVarReservoir_FarmPondStorage          "SmallReservoirStorage"
-#define MDVarReservoir_FarmPondStorageChange    "SmallReservoirStorageChange"
-#define MDVarReservoir_FarmPontUptake           "SmallReservoirUptake"
-#define MDVarReservoir_FarmPondEvaporation      "SmallReservoirEvaporation"
 #define MDVarReservoir_Capacity                 "ReservoirCapacity"
 #define MDVarReservoir_Inflow                   "ReservoirInflow"
 #define MDVarReservoir_NatInflow                "ReservoirNatInflow"
@@ -312,7 +302,6 @@ extern "C" {
 #define MDVarTP2M_Demand3                       "Demand3"
 #define MDVarTP2M_Demand4                       "Demand4"
 #define MDVarTP2M_Downstream_OnOff              "Downstream_OnOff"
-#define MDVarTP2M_Equil_Temp                    "Equil_Temp"
 #define MDVarTP2M_Efficiency1                   "Efficiency1"
 #define MDVarTP2M_Efficiency2                   "Efficiency2"
 #define MDVarTP2M_Efficiency3                   "Efficiency3"
@@ -326,7 +315,6 @@ extern "C" {
 #define MDVarTP2M_Generation2                   "Generation2"
 #define MDVarTP2M_Generation3                   "Generation3"
 #define MDVarTP2M_Generation4                   "Generation4"
-#define MDVarTP2M_GW_Temp					    "GW_Temp"
 #define MDVarTP2M_HeatToRiver1                  "HeatToRiver1"
 #define MDVarTP2M_HeatToRiver2                  "HeatToRiver2"
 #define MDVarTP2M_HeatToRiver3                  "HeatToRiver3"
@@ -373,20 +361,15 @@ extern "C" {
 #define MDVarTP2M_TotalReturnFlow               "TotalReturnFlow"
 #define MDVarTP2M_SimEfficiency                 "SimEfficiency"
 #define MDVarTP2M_TotalExternalWater			"TotalExternalWater"
-#define MDVarTP2M_WTempGrdWater                 "GroundWaterTemperature"
-#define MDVarTP2M_WTempRiver                    "SurfaceRunoffTemperature"
-#define MDVarTP2M_WTempSurfRunoff               "SurfaceROTemperature"
-#define MDVarTP2M_WTLocalIn_QxT                 "QxT_LocalIn"
-#define MDVarTP2M_Removal_QxT                   "QxT_Removal"
-#define MDVarTP2M_Flux_QxT                      "QxT_Flux"
-#define MDVarTP2M_Storage_QxT                   "QxT_Storage"
-#define MDVarTP2M_DeltaStorage_QxT              "QxT_DeltaStorage"
-#define MDVarTP2M_Temp_QxT                      "RiverTemperature"    // Proper output name
-#define MDVarTP2M_WTempDeltaT_QxT               "QxT_deltaT"
-#define MDVarTP2M_FluxMixing_QxT                "QxT_FluxMixing"
-#define MDVarTP2M_StorageMixing_QxT             "QxT_StorageMixing"
-#define MDVarTP2M_DeltaStorageMixing_QxT        "QxT_DeltaStorageMixing"
-#define MDVarTP2M_WTempMixing_QxT               "QxT_WaterTempMixing"
+#define MDVarWTemp_GrdWater                     "GroundWaterTemp"
+#define MDVarWTemp_Runoff                       "RunoffTemperature"
+#define MDVarWTemp_SurfRunoff                   "SurfRunoffTemp"
+#define MDVarWTemp_EquilTemp                    "RiverEquilibriumTemp"
+#define MDVarWTemp_EquilTempDiff                "RiverEquilibriumTempDiff"
+#define MDVarWTemp_HeatFlux                     "RiverHeatFlux"
+#define MDVarWTemp_HeatFluxNoEquil              "RiverHeatFluxNoEquil"
+#define MDVarWTemp_River                        "RiverTemperature"
+#define MDVarWTemp_RiverNoEquil                 "RiverTemperatureNoEquil"
 
 // Varying Parameters
 #define MDVarParam_Albedo                       "Albedo"
@@ -439,17 +422,22 @@ int MDAux_AccumGrdWatChgDef ();
 int MDAux_AccumPrecipDef ();
 int MDAux_AccumRunoffDef ();
 int MDAux_AccumSMoistChgDef ();
-int MDAux_AvgNStepsDef ();
-int MDAux_MeanDischargeDef ();
-int MDAux_MinimumDischargeDef ();
-int MDAux_MaximumDischargeDef ();
-int MDAux_MeanRunoffDef ();
+int MDAux_AccumRiverStorageChg ();
+int MDAux_StepCounterDef ();
+int MDAux_AirTemperatureMeanDef ();
+int MDAux_DischargeMeanDef ();
+int MDAux_DischargeMinDef ();
+int MDAux_DischargeMaxDef ();
+int MDAux_RunoffMeanDef ();
 
 int MDCommon_AirTemperatureDef ();
 int MDCommon_CloudCoverDef ();
 int MDCommon_GrossRadDef ();
+int MDCommon_HumidityDewPointTemperatureDef ();
 int MDCommon_HumidityRelativeDef ();
+int MDCommon_HumiditySaturatedVaporPressureDef ();
 int MDCommon_HumiditySpecificDef ();
+int MDCommon_HumidityVaporPressureDef ();
 int MDCommon_PrecipitationDef ();
 int MDCommon_SolarRadDef ();
 int MDCommon_SolarRadDayLengthDef ();
@@ -458,7 +446,9 @@ int MDCommon_WetBulbTempDef ();
 int MDCommon_WetDaysDef ();
 
 int MDCore_BaseFlowDef ();
+int MDCore_GroundWaterChangeDef ();
 int MDCore_EvapotranspirationDef ();
+int MDCore_RainEvapotranspirationDef ();
 int MDCore_RainInfiltrationDef ();
 int MDCore_RainInterceptDef ();
 int MDCore_RainPotETDef ();
@@ -475,7 +465,7 @@ int MDCore_RainSMoistChgDef ();
 int MDCore_RainSurfRunoffDef ();
 int MDCore_RainWaterSurplusDef ();
 int MDCore_RunoffDef ();
-int MDCore_RunoffVolumeDef ();
+int MDCore_RunoffFlowDef ();
 int MDCore_SnowPackChgDef ();
 int MDCore_SnowPackMeltDef ();
 int MDCore_SoilAvailWaterCapDef ();
@@ -484,6 +474,7 @@ int MDCore_SurfRunoffDef ();
 int MDCore_WaterBalanceDef ();
 
 int MDIrrigation_IrrAreaDef ();
+int MDIrrigation_EvapotranspirationDef ();
 int MDIrrigation_GrossDemandDef ();
 int MDIrrigation_ReferenceETDef ();
 int MDIrrigation_ReferenceETFAODef ();
@@ -511,11 +502,12 @@ int MDParam_LCStemAreaIndexDef ();
 
 int MDRouting_BankfullQcalcDef ();
 int MDRouting_DischargeDef ();
-int MDRouting_DischargeInChannelDef ();
-int MDRouting_DischargeInChannelAccumulateDef ();
-int MDRouting_DischargeInChannelCascadeDef ();
-int MDRouting_DischargeInChannelMuskingumDef ();
-int MDRouting_DischargeInChannelMuskingumCoeffDef ();
+int MDRouting_ChannelDischargeDef ();
+int MDRouting_ChannelStorageChgDef ();
+int MDRouting_ChannelDischargeAccumulateDef ();
+int MDRouting_ChannelDischargeCascadeDef ();
+int MDRouting_ChannelDischargeMuskingumDef ();
+int MDRouting_ChannelDischargeMuskingumCoeffDef ();
 int MDRouting_DischargeUptakeDef ();
 int MDRouting_RiverShapeExponentDef ();
 int MDRouting_RiverWidthDef ();
@@ -526,8 +518,6 @@ int MDReservoir_TargetLowFlowDef ();
 int MDReservoir_TargetHighFlowDef ();
 int MDReservoir_ExtractableReleaseDef ();
 int MDReservoir_UptakeDef    ();
-int MDReservoir_FarmPondReleaseDef  ();
-int MDReservoir_FarmPondCapacityDef ();
 
 int MDSediment_BQARTpreprocessDef ();
 int MDSediment_BedloadFluxDef ();
@@ -539,11 +529,11 @@ int MDSediment_ParticulateNutrientsDef ();
 int MDSediment_ParticulateNutrients_noBFDef ();
 int MDSediment_WaterDensityDef ();
 
-int MDTP2M_WTempGrdWaterDef ();
-int MDTP2M_WTempRiverDef ();
-int MDTP2M_WTempRiverRouteDef ();
-int MDTP2M_ThermalInputsDef ();  //changed AM 042415
-int MDTP2M_WTempSurfRunoffDef();
+int MDWTemp_GrdWaterDef ();
+int MDWTemp_RunoffDef ();
+int MDWTemp_RiverDef ();
+int MDWTemp_ThermalInputsDef ();
+int MDWTemp_SurfRunoffDef ();
 
 int MDCore_RainWaterSurplusDef ();
 /* PET & Related Functions */
