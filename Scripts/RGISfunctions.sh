@@ -191,10 +191,11 @@ function _RGISvariableDir () {
 	local      archive="${1}"; shift
 	local       domain="${1}"; shift
 	local     variable="${1}"; shift
+	local      product="${1}"; shift
 
 	local       varDir=$(RGISlookupSubject "${variable}")
 
-	if [ -e "${archive}/${domain%+}/${varDir}" ]
+	if [ -e "${archive}/${domain%+}/${varDir}/${product}" ]
 	then
 		echo "${domain%+}/${varDir}"
 		return 0
@@ -208,9 +209,9 @@ function _RGISvariableDir () {
 			local parent="${archive}/${domain%+}/parent"
 			if [ -e "${parent}" ]
 			then
-				_RGISvariableDir "${archive}" "$(cat ${archive}/${domain%+}/parent)+" "${variable}" || return 1
+				_RGISvariableDir "${archive}" "$(cat ${parent})+" "${variable}" "${product}" || return 1
 			else
-				echo "Missing ${archive}/${domain%+}/${varDir}" > /dev/stderr
+				echo "Missing ${archive}/${domain%+}/${varDir}/${product}" > /dev/stderr
 				echo ""
 				return 1
 			fi
@@ -307,7 +308,7 @@ function _RGISresolutionDir () {
 	local      product="${1}"; shift
 	local   resolution="${1}"; shift
 
-	local varDir=$(_RGISvariableDir "${archive}" "${domain}" "${variable}")
+	local varDir=$(_RGISvariableDir "${archive}" "${domain}" "${variable}" "${product}")
 	if [ "${varDir}" == "" ]
 	then
 		return
