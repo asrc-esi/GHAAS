@@ -25,6 +25,7 @@ typedef struct VDBmasterTable_s {
     const char *DataType;
     const char *Shadeset;
     const char *Aggregation;
+    const char *Sampling;
 } VDBmasterTable_t;
 
 typedef enum { VDBversion2 = 2, VDBversion3 = 3 } VDBversion;
