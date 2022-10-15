@@ -21,6 +21,7 @@ static void _CMDprintUsage (const char *arg0) {
     CMmsgPrint(CMmsgInfo, "     -l, --longname    [variable name]");
     CMmsgPrint(CMmsgInfo, "     -a, --aggregation [variable name]");
     CMmsgPrint(CMmsgInfo, "     -s, --shadeset    [variable name]");
+    CMmsgPrint(CMmsgInfo, "     -S, --sampling    [variable name]");
     CMmsgPrint(CMmsgInfo, "     -t, --datatype    [variable name]");
     CMmsgPrint(CMmsgInfo, "     -v, --version     [vdb2|vdb3]");
     CMmsgPrint(CMmsgInfo, "     -h, --help");
@@ -34,6 +35,7 @@ int main(int argc, char *argv[]) {
     const char *dtType = (const char *) NULL;
     const char *shdSet = (const char *) NULL;
     const char *aggreg = (const char *) NULL;
+    const char *sample = (const char *) NULL;
     VDBversion version = VDBversion2;
 
     if (argNum < 2) goto Help;
@@ -81,6 +83,15 @@ int main(int argc, char *argv[]) {
                 return (CMfailed);
             }
             shdSet = argv[argPos];
+            if ((argNum = CMargShiftLeft(argPos, argv, argNum)) <= argPos) break;
+            continue;
+        }
+        if (CMargTest (argv[argPos], "-S", "--sampling")) {
+            if ((argNum = CMargShiftLeft(argPos, argv, argNum)) <= argPos) {
+                CMmsgPrint(CMmsgUsrError, "Missing variable name!");
+                return (CMfailed);
+            }
+            sample = argv[argPos];
             if ((argNum = CMargShiftLeft(argPos, argv, argNum)) <= argPos) break;
             continue;
         }
@@ -141,6 +152,11 @@ Help:   if (CMargTest (argv[argPos], "-h", "--help")) {
         cfName = shdSet;
         if (((shdSet = VDBshadset(version, cfName)) != NULL) ||
             (((cfName = VDBcfName(version, cfName)) != NULL) && ((shdSet = VDBshadset(version, cfName)) != NULL)))
+            printf("%s",shdSet);
+    } else if (sample != (const char *) NULL) {
+        cfName = sample;
+        if (((sample = VDBsampling(version, cfName)) != NULL) ||
+            (((cfName = VDBcfName(version, cfName)) != NULL) && ((sample = VDBsampling(version, cfName)) != NULL)))
             printf("%s",shdSet);
     } else if (aggreg != (const char *) NULL) {
         cfName = aggreg;

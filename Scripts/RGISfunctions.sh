@@ -126,6 +126,19 @@ function RGISlookupShadeset () {
     fi
 }
 
+function RGISlookupShadeset () {
+    local   variable="${1}"; shift
+    local vdbVersion="${1}";
+
+    local sampling="$(vdbLookup -S "${variable}" -v "${__RGISarchiveVDBversion}")"
+    if [[ "${sampling}" == "" ]]
+    then
+        echo "zone"
+    else
+        echo "${sampling}"
+    fi
+}
+
 function RGISlookupAggrMethod () {
     local   variable="${1}"; shift
     local vdbVersion="${1}";
