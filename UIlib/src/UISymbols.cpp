@@ -192,7 +192,7 @@ static void _UISymbolLoadNamesCBK(Widget widget, Widget list, XmAnyCallbackStruc
         return;
     }
 
-    snprintf(delimit, DBStringLength, "%c%c", DBASCIISeparator, '\0');
+    snprintf(delimit, sizeof(delimit), "%c%c", DBASCIISeparator, '\0');
     while (fgets(buffer, sizeof(buffer), file) != NULL) {
         token = strtok(buffer, delimit);
         sscanf(token, "%d", &symbol);

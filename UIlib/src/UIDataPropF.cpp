@@ -101,8 +101,8 @@ static void UIDataPropPrecision(Widget widget, int value) {
 
     XtVaGetValues(widget, XmNuserData, &label, NULL);
     formatString[0] = '%';
-    snprintf(formatString + 1, sizeof(formatString), "%d.%df", 8, value > 0 ? 0 : value == 0 ? 1 : 0 - value);
-    snprintf(numberString,     sizeof(numberString), formatString, pow((double) 10.0, (double) value));
+    snprintf(formatString + 1, sizeof(formatString) - 1, "%d.%df", 8, value > 0 ? 0 : value == 0 ? 1 : 0 - value);
+    snprintf(numberString,     sizeof(numberString),     formatString, pow((double) 10.0, (double) value));
     UIAuxSetLabelString(label, numberString);
 }
 
