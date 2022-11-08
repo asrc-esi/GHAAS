@@ -110,8 +110,8 @@ int DBImportARCLine(DBObjData *vecData, const char *arcCov) {
     linkNumFLD = nodes->Field(DBrNLinkNum);
     data = vecData->Arrays();
 
-    sprintf(fileName, "%s/arc", arcCov);
-    if (access(fileName, R_OK) == DBFault) sprintf(fileName, "%s/arc.adf", arcCov);
+    snprintf(fileName, sizeof(fileName), "%s/arc", arcCov);
+    if (access(fileName, R_OK) == DBFault) snprintf(fileName, sizeof(fileName), "%s/arc.adf", arcCov);
 
     if ((inFile = fopen(fileName, "r")) == NULL) {
         CMmsgPrint(CMmsgSysError, "File Opening Error in: %s %d", __FILE__, __LINE__);
@@ -125,14 +125,14 @@ int DBImportARCLine(DBObjData *vecData, const char *arcCov) {
     arcNum = 0;
     for (lineRec = lines->First(); arcRecord.Read(inFile, swap) != DBFault; lineRec = lines->Next()) {
         if (lineRec == NULL) {
-            sprintf(objName, "Line: %5d", arcRecord.ID() + 1);
+            snprintf(objName, sizeof(objName), "Line: %5d", arcRecord.ID() + 1);
             if ((lineRec = lines->Add(objName)) == (DBObjRecord *) NULL) return (DBFault);
         }
         else DBPause((++arcNum * 100) / lines->ItemNum());
 
         floatCov = arcRecord.RecordLength() - 12 == arcRecord.NumOfPnts() * (DBInt) sizeof(float) ? true : false;
         while (arcRecord.FromNode() > nodes->ItemNum()) {
-            sprintf(objName, "Node: %5d", nodes->ItemNum() + 1);
+            snprintf(objName, sizeof(objName), "Node: %5d", nodes->ItemNum() + 1);
             nodes->Add(objName);
             if ((nodeRec = nodes->Item()) == NULL) return (DBFault);
             linkNumFLD->Int(nodeRec, 0);
@@ -208,7 +208,7 @@ int DBImportARCLine(DBObjData *vecData, const char *arcCov) {
         else vertexesFLD->Record(lineRec, (DBObjRecord *) NULL);
         vertexNumFLD->Int(lineRec, arcRecord.NumOfPnts() - 2);
         while (arcRecord.ToNode() > nodes->ItemNum()) {
-            sprintf(objName, "Node: %5d", nodes->ItemNum() + 1);
+            snprintf(objName, sizeof(objName), "Node: %5d", nodes->ItemNum() + 1);
             nodes->Add(objName);
             if ((nodeRec = nodes->Item()) == NULL) return (DBFault);
             linkNumFLD->Int(nodeRec, 0);

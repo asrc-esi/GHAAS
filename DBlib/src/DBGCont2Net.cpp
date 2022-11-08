@@ -196,7 +196,7 @@ DBInt DBGridCont2Network(DBObjData *gridData, DBObjData *netData, bool downhill,
             }
             SlopeStop:
             if (maxDir != DBFault) {
-                sprintf(nameSTR, "GHAASCell:%d", cellTable->ItemNum());
+                snprintf(nameSTR, sizeof(nameSTR), "GHAASCell:%d", cellTable->ItemNum());
                 cellRec = cellTable->Add(nameSTR);
                 positionFLD->Position(cellRec, pos);
                 toCellFLD->Int(cellRec, (DBInt) maxDir);
@@ -215,7 +215,7 @@ DBInt DBGridCont2Network(DBObjData *gridData, DBObjData *netData, bool downhill,
     }
     PauseStop:
     if (pos.Row < gridIF->RowNum()) return (DBFault);
-    sprintf(nameSTR, "GHAASBasin%d", (DBInt) 1);
+    snprintf(nameSTR, sizeof(nameSTR), "GHAASBasin%d", (DBInt) 1);
     basinRec = basinTable->Add(nameSTR);
     mouthPosFLD->Position(basinRec, positionFLD->Position(cellTable->Item(0)));
     colorFLD->Int(basinRec, 0);

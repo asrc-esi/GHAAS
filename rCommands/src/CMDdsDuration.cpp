@@ -274,7 +274,7 @@ Help:   if (CMargTest(argv[argPos], "-h", "--help")) {
                     output[i] = (binMax + binMin) / 2.0;
                 }
             }
-            sprintf(outHeader.Date, "%3d", percent + 1);
+            snprintf(outHeader.Date, sizeof(outHeader.Date), "%3d", percent + 1);
             if (MFdsHeaderWrite (&outHeader, outFile) == CMsucceeded) {
                 CMmsgPrint(CMmsgSysError, "Output writing error in: %s:%d", __FILE__, __LINE__);
                 goto Stop;

@@ -65,7 +65,7 @@ Help:   if (CMargTest(argv[argPos], "-h", "--help")) {
     for (argPos = 1; argPos < argNum; ++argPos) {
         if (strncmp(CMfileExtension(argv[argPos]), "gz", 2) == 0) {
             char pCommand[strlen(argv[argPos]) + 16];
-            sprintf(pCommand, "gunzip -c %s", argv[argPos]);
+            snprintf(pCommand, sizeof(pCommand), "gunzip -c %s", argv[argPos]);
             inFile = popen(pCommand, "r");
             inCompress = true;
         }
@@ -121,7 +121,7 @@ Help:   if (CMargTest(argv[argPos], "-h", "--help")) {
                         CMmsgPrint(CMmsgSysError, "Memory allocation error in: %s:%d", __FILE__, __LINE__);
                         goto Stop;
                     }
-                    if (strlen (header.Date) == 4) sprintf (dates[recordID],"XXXX"); else sprintf (dates[recordID],"XXXX%s",header.Date + 4); 
+                    if (strlen (header.Date) == 4) snprintf (dates[recordID],MFDateStringLength, "XXXX"); else snprintf (dates[recordID],MFDateStringLength,"XXXX%s",header.Date + 4); 
                     for (i = 0; i < itemNum; ++i) { arrays[recordID][i] = 0.0; obsNums[recordID][i] = 0; }
                 }
                 if (fread(((char *) items), itemSize, itemNum, inFile) != itemNum) {
@@ -187,7 +187,7 @@ Next:   if (inFile != (FILE *) NULL) { if (inCompress) pclose (inFile); else fcl
     else {
         if (strncmp(CMfileExtension(outFileName), "gz", 2) == 0) {
             char pCommand[strlen(outFileName) + 16];
-            sprintf(pCommand, "gzip > %s", outFileName);
+            snprintf(pCommand, sizeof(pCommand), "gzip > %s", outFileName);
             outFile = popen(pCommand, "w");
             outCompress = true;
         }

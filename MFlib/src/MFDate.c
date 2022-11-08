@@ -101,13 +101,13 @@ bool MFDateSetCurrent (char *currentDate) { return (_MFDateSet (&_MFCurrentDate,
 char *MFDateGetCurrent () {
     static char time [MFDateStringLength];
 
-    if (_MFCurrentDate.Year != MFDefaultMissingInt) sprintf (time,"%4d",_MFCurrentDate.Year);
+    if (_MFCurrentDate.Year != MFDefaultMissingInt) snprintf (time, sizeof(time), "%4d",_MFCurrentDate.Year);
     else strcpy (time,MFDateClimatologyYearStr);
 
     if (_MFCurrentDate.Month   == MFDefaultMissingInt) return (time);
-    sprintf (time + strlen (time),"-%02d",_MFCurrentDate.Month);
+    snprintf (time + strlen (time), sizeof(time), "-%02d",_MFCurrentDate.Month);
     if (_MFCurrentDate.Day     == MFDefaultMissingInt) return (time);
-    sprintf (time + strlen (time),"-%02d",_MFCurrentDate.Day);
+    snprintf (time + strlen (time), sizeof(time), "-%02d",_MFCurrentDate.Day);
     return (time);
 }
 
@@ -134,13 +134,13 @@ char *MFDateGetNext () {
 		date.DayOfYear += _MFDateMonthLength (date.Year,month);
 	date.DayOfYear += date.Day;
 
-	if (date.Year != MFDefaultMissingInt) sprintf (time,"%4d",date.Year);
+	if (date.Year != MFDefaultMissingInt) snprintf (time, sizeof(time), "%4d",date.Year);
 	else strcpy (time,MFDateClimatologyYearStr);
 
 	if (date.Month   == MFDefaultMissingInt) return (time);
-	sprintf (time + strlen (time),"-%02d",date.Month);
+	snprintf (time + strlen (time), sizeof(time), "-%02d",date.Month);
 	if (date.Day     == MFDefaultMissingInt) return (time);
-	sprintf (time + strlen (time),"-%02d",date.Day);
+	snprintf (time + strlen (time), sizeof(time), "-%02d",date.Day);
 	return (time);
 }
 

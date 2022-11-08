@@ -1348,7 +1348,7 @@ private:
 
     const char *RecordName(DBInt id) {
         static char string[DBStringLength];
-        sprintf(string, "Record:%d", id + 1);
+        snprintf(string, DBStringLength, "Record:%d", id + 1);
         return (string);
     }
 

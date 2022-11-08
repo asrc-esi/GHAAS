@@ -177,37 +177,37 @@ void RGISAnGNUXYPlotCBK (Widget widget,RGISWorkspace *workspace,XmAnyCallbackStr
 			{
 			record = itemTable->Item (rowID);
 			if ((record->Flags () & DBObjectFlagIdle) == DBObjectFlagIdle) continue;
-			sprintf (buffer,"%d\t\"%s\"\t%d",record->RowID () + 1,record->Name (),
+			snprintf (buffer, sizeof(buffer), "%d\t\"%s\"\t%d",record->RowID () + 1,record->Name (),
 						(record->Flags () & DBObjectFlagSelected) == DBObjectFlagSelected ? true : false);
 			if (field0->Type () == DBTableFieldInt)
 				{
 				intVal = field0->Int (record);
 				if (intVal == field0->IntNoData ()) continue;
-				sprintf (buffer + strlen (buffer),"\t%d",intVal);
+				snprintf (buffer + strlen (buffer), sizeof(buffer) - strlen(buffer), "\t%d",intVal);
 				}
 			else
 				{
 				val = field0->Float (record);
 				if (CMmathEqualValues (val,field0->FloatNoData ())) continue;
-				sprintf (buffer + strlen (buffer),"\t%f",val);
+				snprintf (buffer + strlen (buffer), sizeof(buffer) - strlen(buffer), "\t%f",val);
 				}
 			if (field1->Type () == DBTableFieldInt)
 				{
 				intVal = field1->Int (record);
 				if (intVal == field1->IntNoData ()) continue;
-				sprintf (buffer + strlen (buffer),"\t%d",intVal);
+				snprintf (buffer + strlen (buffer), sizeof(buffer) - strlen(buffer), "\t%d",intVal);
 				}
 			else
 				{
 				val = field1->Float (record);
 				if (CMmathEqualValues (val,field1->FloatNoData ())) continue;
-				sprintf (buffer + strlen (buffer),"\t%f",val);
+				snprintf (buffer + strlen (buffer), sizeof(buffer) - strlen(buffer), "\t%f",val);
 				}
 			fprintf (file,"%s\n",buffer);
 			}
 		fclose (file);
 		ghaasDir = getenv ("GHAAS_DIR");
-		sprintf (command,"%s/Scripts/xy-plot.sh %s %s",ghaasDir != (const char *) NULL ? ghaasDir : ".",fileName,logScale ? "log" : "normal");
+		snprintf (command, sizeof(command), "%s/Scripts/xy-plot.sh %s %s",ghaasDir != (const char *) NULL ? ghaasDir : ".",fileName,logScale ? "log" : "normal");
 		system (command);
 		unlink (fileName);
 		}

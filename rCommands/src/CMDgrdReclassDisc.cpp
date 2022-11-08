@@ -112,7 +112,7 @@ Help:   if (CMargTest (argv[argPos], "-h", "--help")) {
             delete srcData;
             return (CMfailed);
         }
-        sprintf(title, "%s (Reclassed)", srcData->Name());
+        snprintf(title, strlen(srcData->Name()) + 16, "%s (Reclassed)", srcData->Name());
     }
     if (subject == (char *) NULL) subject = srcData->Document(DBDocSubject);
     if (domain == (char *) NULL) domain = srcData->Document(DBDocGeoDomain);

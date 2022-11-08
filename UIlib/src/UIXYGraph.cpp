@@ -141,7 +141,7 @@ static DBFloat _UIXYGraphCalculateStep(DBFloat *min, DBFloat *max, DBInt stepNum
     DBInt power, integers, decimals;
 
     if ((range = fabs(*max - *min)) < 0.000001) {
-        sprintf(format + 1, "8.5f");
+        snprintf(format + 1, DBStringLength - 1, "8.5f");
         format[0] = '%';
         return (1.0);
     }
@@ -155,7 +155,7 @@ static DBFloat _UIXYGraphCalculateStep(DBFloat *min, DBFloat *max, DBInt stepNum
     *max = ceil(*max / step) * step;
     decimals = 2 - power > 0 ? 2 - power : 0;
     integers = *max > range ? abs((DBInt) ceil(log10(*max))) : abs((DBInt) ceil(log10(range)));
-    sprintf(format + 1, "%d.%df", 2 + integers + decimals, decimals);
+    snprintf(format + 1, DBStringLength,"%d.%df", 2 + integers + decimals, decimals);
     format[0] = '%';
     return (step);
 }
@@ -289,7 +289,7 @@ void UIXYGraph::DrawSeries(int clear) {
                                       (XYRangeVAR.UpperRight.X - XYRangeVAR.LowerLeft.X)) - 1;
             x -= width * ViewOffsetVAR / ViewPercentVAR;
             XDrawLine(XtDisplay(DrawingAreaWGT), XtWindow(DrawingAreaWGT), Gc, x, yAxisHeight, x, yAxisHeight + 5);
-            sprintf(numberStr, XFormatSTR, stepNum * XYStepVAR.X + XYRangeVAR.LowerLeft.X);
+            snprintf(numberStr, sizeof(numberStr), XFormatSTR, stepNum * XYStepVAR.X + XYRangeVAR.LowerLeft.X);
             string = XmStringCreate(numberStr, UICharSetNormal);
             XmStringExtent(UISmallFontList(), string, &strWidth, &strHeight);
             XmStringDraw(XtDisplay(DrawingAreaWGT), XtWindow(DrawingAreaWGT), UISmallFontList(),
@@ -388,7 +388,7 @@ void UIXYGraph::DrawYAxis(int clear) {
             y = height -
                 (DBInt) ((stepNum * XYStepVAR.Y) * height / (XYRangeVAR.UpperRight.Y - XYRangeVAR.LowerLeft.Y));
             XDrawLine(XtDisplay(YAxisWGT), XtWindow(YAxisWGT), Gc, width - 5, y, width - 1, y);
-            sprintf(numberStr, YFormatSTR, stepNum * XYStepVAR.Y + XYRangeVAR.LowerLeft.Y);
+            snprintf(numberStr, sizeof(numberStr), YFormatSTR, stepNum * XYStepVAR.Y + XYRangeVAR.LowerLeft.Y);
             string = XmStringCreate(numberStr, UICharSetNormal);
             XmStringExtent(UISmallFontList(), string, &strWidth, &strHeight);
             XmStringDraw(XtDisplay(YAxisWGT), XtWindow(YAxisWGT), UISmallFontList(),
@@ -402,7 +402,7 @@ void UIXYGraph::DrawYAxis(int clear) {
             y = height -
                 (DBInt) ((stepNum * ObsStepVAR.Value) * height / (ObsRangeVAR.Max.Value - ObsRangeVAR.Min.Value));
             XDrawLine(XtDisplay(YAxisWGT), XtWindow(YAxisWGT), Gc, width - 5, y, width - 1, y);
-            sprintf(numberStr, YFormatSTR, stepNum * ObsStepVAR.Value + ObsRangeVAR.Min.Value);
+            snprintf(numberStr, sizeof(numberStr), YFormatSTR, stepNum * ObsStepVAR.Value + ObsRangeVAR.Min.Value);
             string = XmStringCreate(numberStr, UICharSetNormal);
             XmStringExtent(UISmallFontList(), string, &strWidth, &strHeight);
             XmStringDraw(XtDisplay(YAxisWGT), XtWindow(YAxisWGT), UISmallFontList(),

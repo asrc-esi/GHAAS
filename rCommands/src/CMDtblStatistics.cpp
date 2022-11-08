@@ -232,7 +232,7 @@ FieldOptions *FOHierarchy(const char *funcname, const char *oldName, char *newNa
                        last->getOldName());
         if (newName == (char *) NULL) {
             newName = new char[strlen(oldName) + 10];
-            sprintf(newName, "NONNULL(%s)", oldName);
+            snprintf(newName,  strlen(oldName) + 10, "NONNULL(%s)", oldName);
             rmNew = true;
         }
         last->next = new FieldOptions(NONNULL, oldName, newName, last->next);
@@ -244,7 +244,7 @@ FieldOptions *FOHierarchy(const char *funcname, const char *oldName, char *newNa
                        last->getOldName());
         if (newName == (char *) NULL) {
             newName = new char[strlen(oldName) + 6];
-            sprintf(newName, "MIN(%s)", oldName);
+            snprintf(newName,  strlen(oldName) + 6, "MIN(%s)", oldName);
             rmNew = true;
         }
         last->next = new FieldOptions(MIN, oldName, newName, last->next);
@@ -256,7 +256,7 @@ FieldOptions *FOHierarchy(const char *funcname, const char *oldName, char *newNa
                        last->getOldName());
         if (newName == (char *) NULL) {
             newName = new char[strlen(oldName) + 6];
-            sprintf(newName, "MAX(%s)", oldName);
+            snprintf(newName,  strlen(oldName) + 6, "MAX(%s)", oldName);
             rmNew = true;
         }
         last->next = new FieldOptions(MAX, oldName, newName, last->next);
@@ -268,7 +268,7 @@ FieldOptions *FOHierarchy(const char *funcname, const char *oldName, char *newNa
                        last->getOldName());
         if (newName == (char *) NULL) {
             newName = new char[strlen(oldName) + 6];
-            sprintf(newName, "SUM(%s)", oldName);
+            snprintf(newName,  strlen(oldName) + 6, "SUM(%s)", oldName);
             rmNew = true;
         }
         last->next = new FieldOptions(SUM, oldName, newName, last->next);
@@ -282,7 +282,7 @@ FieldOptions *FOHierarchy(const char *funcname, const char *oldName, char *newNa
                        last->getOldName());
         if (newName == (char *) NULL) {
             newName = new char[strlen(oldName) + 6];
-            sprintf(newName, "AVG(%s)", oldName);
+            snprintf(newName,  strlen(oldName) + 6, "AVG(%s)", oldName);
             rmNew = true;
         }
         last->next = new FieldOptions(AVG, oldName, newName, last->next);
@@ -296,7 +296,7 @@ FieldOptions *FOHierarchy(const char *funcname, const char *oldName, char *newNa
                        last->getOldName());
         if (newName == (char *) NULL) {
             newName = new char[strlen(oldName) + 7];
-            sprintf(newName, "NAVG(%s)", oldName);
+            snprintf(newName,  strlen(oldName) + 7, "NAVG(%s)", oldName);
             rmNew = true;
         }
         last->next = new FieldOptions(NAVG, oldName, newName, last->next);
@@ -308,7 +308,7 @@ FieldOptions *FOHierarchy(const char *funcname, const char *oldName, char *newNa
                        last->getOldName());
         if (newName == (char *) NULL) {
             newName = new char[strlen(oldName) + 6];
-            sprintf(newName, "PCT(%s)", oldName);
+            snprintf(newName,  strlen(oldName) + 6, "PCT(%s)", oldName);
             rmNew = true;
         }
         last->next = new FieldOptions(PCT, oldName, newName, last->next);
@@ -321,7 +321,7 @@ FieldOptions *FOHierarchy(const char *funcname, const char *oldName, char *newNa
                        last->getOldName());
         if (newName == (char *) NULL) {
             newName = new char[strlen(oldName) + 6];
-            sprintf(newName, "MED(%s)", oldName);
+            snprintf(newName,  strlen(oldName) + 6, "MED(%s)", oldName);
             rmNew = true;
         }
         last->next = new FieldOptions(MED, oldName, newName, last->next);
@@ -334,7 +334,7 @@ FieldOptions *FOHierarchy(const char *funcname, const char *oldName, char *newNa
                        last->getOldName());
         if (newName == (char *) NULL) {
             newName = new char[strlen(oldName) + 6];
-            sprintf(newName, "MOD(%s)", oldName);
+            snprintf(newName,  strlen(oldName) + 6, "MOD(%s)", oldName);
             rmNew = true;
         }
         last->next = new FieldOptions(MOD, oldName, newName, last->next);
@@ -348,7 +348,7 @@ FieldOptions *FOHierarchy(const char *funcname, const char *oldName, char *newNa
                        last->getOldName());
         if (newName == (char *) NULL) {
             newName = new char[strlen(oldName) + 6];
-            sprintf(newName, "DEV(%s)", oldName);
+            snprintf(newName,  strlen(oldName) + 6, "DEV(%s)", oldName);
             rmNew = true;
         }
         last->next = new FieldOptions(DEV, oldName, newName, last->next);

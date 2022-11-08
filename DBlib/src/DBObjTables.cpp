@@ -177,7 +177,7 @@ void DBObjTableField::Initialize(DBInt type, const char *format, DBUnsigned leng
     LengthVAR = length;
     switch (type) {
         case DBTableFieldString:
-            sprintf(FormatSTR + 1, "%ds", length);
+            snprintf(FormatSTR + 1, sizeof(FormatSTR), "%ds", length);
             FormatSTR[0] = '%';
             break;
         case DBTableFieldInt:
@@ -206,7 +206,7 @@ void DBObjTableField::Initialize(DBInt type, const char *format, DBUnsigned leng
             strncpy(FormatSTR, format, DBStringLength);
             break;
         case DBTableFieldDate:
-            sprintf(FormatSTR + 1, "%ds", length);
+            snprintf(FormatSTR + 1, sizeof(FormatSTR), "%ds", length);
             FormatSTR[0] = '%';
             Length(sizeof(DBDate));
             break;
@@ -328,13 +328,13 @@ char *DBObjTableField::String(const DBObjRecord *record) const {
         case DBTableFieldInt: {
             DBInt ret = Int(record);
             if (ret == IntNoData()) return ((char *) "");
-            sprintf(retString, Format(), ret);
+            snprintf(retString, sizeof(retString), Format(), ret);
             return (retString);
         }
         case DBTableFieldFloat: {
             DBFloat ret = Float(record);
             if (CMmathEqualValues(ret, FloatNoData())) return ((char *) "");
-            sprintf(retString, Format(), ret);
+            snprintf(retString, sizeof(retString), Format(), ret);
             return (retString);
         }
         case DBTableFieldDate: {
@@ -586,17 +586,17 @@ void DBObjTableField::FormatWidth(DBInt width) {
 
     switch (Type()) {
         case DBTableFieldInt:
-            sprintf(formatString + 1, "%dd", width);
+            snprintf(formatString + 1, sizeof (formatString) - 1, "%dd", width);
             formatString[0] = '%';
             Format(formatString);
             return;
         case DBTableFieldFloat:
             if (width - 3 < FormatDecimals()) FormatDecimals(width - 3);
-            sprintf(formatString + 1, "%d.%df", width, FormatDecimals());
+            snprintf(formatString + 1, sizeof (formatString) - 1, "%d.%df", width, FormatDecimals());
             formatString[0] = '%';
             Format(formatString);
         case DBTableFieldDate:
-            sprintf(formatString + 1, "%ds", width);
+            snprintf(formatString + 1, sizeof (formatString) - 1, "%ds", width);
             formatString[0] = '%';
             return;
         default:
@@ -625,7 +625,7 @@ void DBObjTableField::FormatDecimals(DBInt decimals) {
 
     if (Type() != DBTableFieldFloat) return;
     width = FormatWidth();
-    sprintf(formatString + 1, "%d.%df", width, decimals);
+    snprintf(formatString + 1, sizeof (formatString) - 1, "%d.%df", width, decimals);
     formatString[0] = '%';
     Format(formatString);
 }

@@ -138,7 +138,7 @@ int main(int argc, char *argv[]) {
                 perror("Memory Allocation Error in: main ()");
                 break;
             }
-            sprintf (qname, "\"%s\"", argStr);
+            snprintf (qname, strlen(argStr) + 3, "\"%s\"", argStr);
             if ((fieldID = FGetFieldID(buffer, qname)) == FFault) {
                 if ((fieldID = FGetFieldID(buffer, argStr)) == FFault) {
                     CMmsgPrint(CMmsgUsrError, "Invalid Field Name: %s", argStr);
@@ -183,7 +183,7 @@ int main(int argc, char *argv[]) {
                 perror("Memory Allocation Error in: main ()");
                 break;
             }
-            sprintf (qname, "\"%s\"", argStr);
+            snprintf (qname, strlen(argStr) + 3, "\"%s\"", argStr);
             if ((fieldID = FGetFieldID(buffer, qname)) == FFault) {
                 if ((fieldID = FGetFieldID(buffer, argStr)) == FFault) {
                     CMmsgPrint(CMmsgUsrError, "Invalid Field Name: %s", argStr);

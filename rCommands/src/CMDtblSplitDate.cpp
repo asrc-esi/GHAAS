@@ -270,12 +270,11 @@ static char *_CMDpadit(int number, bool isYear) {
 
     if (isYear) {
         tmp = (char *) malloc(sizeof(char) * 5);
-        sprintf(tmp, "%04d", number);
+        snprintf(tmp, sizeof(char) * 5, "%04d", number);
     }
     else {
         tmp = (char *) malloc(sizeof(char) * 3);
-        sprintf(tmp, "%02d", number);
+        snprintf(tmp, sizeof(char) * 3, "%02d", number);
     }
-
     return tmp;
 }

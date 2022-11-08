@@ -437,7 +437,7 @@ int MFModelRun (int argc, char *argv [], int argNum, int (*mainDefFunc) ()) {
             }
             for (item = 0; item < var->ItemNum; ++item) MFVarSetFloat(var->ID,item,0.0);
         }
-        if (var->Flux) sprintf (var->Unit + strlen(var->Unit), "/%s", MFDateTimeStepUnit(var->TStep));
+        if (var->Flux) snprintf (var->Unit + strlen(var->Unit), sizeof(var->Unit) - strlen(var->Unit), "/%s", MFDateTimeStepUnit(var->TStep));
         if (var->OutputPath != (char *) NULL) {
             if ((var->OutStream = MFDataStreamOpen(var->OutputPath,"w")) == (MFDataStream_p) NULL) { goto Stop; }
         }

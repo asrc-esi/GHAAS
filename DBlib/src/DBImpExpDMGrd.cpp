@@ -261,7 +261,7 @@ public:
             if (dmLayerHeader.Read(file, swap) == DBFault) return (DBFault);
             if (strlen(dmLayerHeader.Description()) > 0) layerName = dmLayerHeader.Description();
             else {
-                sprintf(layerNameSTR, "GHAASLayer%4d", layer + 1);
+                snprintf(layerNameSTR, sizeof(layerNameSTR), "GHAASLayer%4d", layer + 1);
                 layerName = layerNameSTR;
             }
             layerTable->Add(layerName);
@@ -368,7 +368,7 @@ public:
                                 CMmsgPrint(CMmsgAppError, "Wrong Data Type in: %s %d", __FILE__, __LINE__);
                                 return (DBFault);
                         }
-                        sprintf(nameStr, "Category%04d", value);
+                        snprintf(nameStr, sizeof(nameStr), "Category%04d", value);
                         if ((itemRec = itemTable->Item(nameStr)) == (DBObjRecord *) NULL) {
                             if ((itemRec = itemTable->Add(nameStr)) == (DBObjRecord *) NULL) {
                                 CMmsgPrint(CMmsgAppError, "Item Object Creation Error in: %s %d", __FILE__, __LINE__);

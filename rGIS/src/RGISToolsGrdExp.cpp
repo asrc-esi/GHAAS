@@ -29,26 +29,26 @@ int _RGISToolsGridExportARCInfo (DBObjData *data,char *selection)
 	for (layerID = 0;layerID < gridIF->LayerNum ();++layerID)
 		{
 		layerRec = gridIF->Layer (layerID);
-		sprintf (asciiGrid,"%s/asciigrid%d.tmp",selection,layerID);
+		snprintf (asciiGrid, sizeof(asciiGrid), "%s/asciigrid%d.tmp",selection,layerID);
 		if (DBExportARCGridLayer (data,layerRec,asciiGrid) == DBFault) return (DBFault);
 		}
 	if (data->Type () == DBTypeGridDiscrete)
 		{
-		sprintf (attribDef,"%s/attrib.def",selection);
+		snprintf (attribDef, sizeof(attribDef), "%s/attrib.def",selection);
 		if (DBExportARCTableDef (data,DBrNItems,attribDef) == DBFault)
 			{ unlink (asciiGrid); return (DBFault); }
-		sprintf (attribData,"%s/attrib.dat",selection);
+		snprintf (attribData,sizeof(attribData), "%s/attrib.dat",selection);
 		if (DBExportARCTableData (data,DBrNItems,attribData) == DBFault)
 			{ unlink (asciiGrid); unlink (attribDef); return (DBFault); }
 		}
 	
-	sprintf (amlFile,"%s/grdcreate.aml",selection);
+	snprintf (amlFile, sizeof(amlFile), "%s/grdcreate.aml",selection);
 	if ((file = fopen (amlFile,"w")) == NULL)
 		{
 		for (layerID = 0;layerID < gridIF->LayerNum ();++layerID)
 			{
 			layerRec = gridIF->Layer (layerID);
-			sprintf (asciiGrid,"%s/asciigrid%d.tmp",selection,layerID);
+			snprintf (asciiGrid, sizeof(asciiGrid), "%s/asciigrid%d.tmp",selection,layerID);
 			unlink (asciiGrid);
 			}
 		if (data->Type () == DBTypeGridDiscrete) { unlink (attribDef); unlink (attribData); }
@@ -63,7 +63,7 @@ int _RGISToolsGridExportARCInfo (DBObjData *data,char *selection)
 		coverName	[sizeof (coverName) - 1] = '\0';
 		for (i = 0;i < (DBInt) strlen (coverName);++i) if (coverName [i] == '.') coverName [i] = '\0';
 		for (i = 0;i < (DBInt) strlen (coverName);++i) coverName [i] = tolower (coverName [i]);
-		sprintf (asciiGrid,"%s/asciigrid%d.tmp",selection,layerID);
+		snprintf (asciiGrid, sizeof(asciiGrid), "%s/asciigrid%d.tmp",selection,layerID);
 		if (data->Type () == DBTypeGridContinuous)
 			fprintf (file,"asciigrid %s g_%s float\n",asciiGrid,coverName);
 		else
@@ -91,13 +91,13 @@ int _RGISToolsGridExportARCInfo (DBObjData *data,char *selection)
 
 	if (getenv ("GHAAS_ARC") != NULL)
 		{
-		sprintf (command,getenv ("GHAAS_ARC"),amlFile);
+		snprintf (command, sizeof(command), getenv ("GHAAS_ARC"),amlFile);
 
 		system (command);
 		for (layerID = 0;layerID < gridIF->LayerNum ();++layerID)
 			{
 			layerRec = gridIF->Layer (layerID);
-			sprintf (asciiGrid,"%s/asciigrid%d.tmp",selection,layerID);
+			snprintf (asciiGrid, sizeof(asciiGrid), "%s/asciigrid%d.tmp",selection,layerID);
 			unlink (asciiGrid);
 			}
 		if (data->Type () == DBTypeGridDiscrete) { unlink (attribDef); unlink (attribData); }

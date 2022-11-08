@@ -79,7 +79,7 @@ public:
 };
 
 static char *_UISymSetButtonString(char *symString, int symbol) {
-    sprintf(symString, "*UISymButton%d", symbol);
+    snprintf(symString, DBStringLength, "*UISymButton%d", symbol);
     return (symString);
 }
 
@@ -136,7 +136,7 @@ static void _UISymbolTextValueChangedCBK(Widget widget, Widget list, XmTextVerif
 
 static void _UISymbolListSelectCBK(Widget widget, Widget dShell, XmListCallbackStruct *callData) {
     int symbol = callData->item_position - 1;
-    char symString[20];
+    char symString[DBStringLength];
     UISymbol **editSymbols;
     Widget menu, option;
 
@@ -192,7 +192,7 @@ static void _UISymbolLoadNamesCBK(Widget widget, Widget list, XmAnyCallbackStruc
         return;
     }
 
-    sprintf(delimit, "%c%c", DBASCIISeparator, '\0');
+    snprintf(delimit, DBStringLength, "%c%c", DBASCIISeparator, '\0');
     while (fgets(buffer, sizeof(buffer), file) != NULL) {
         token = strtok(buffer, delimit);
         sscanf(token, "%d", &symbol);

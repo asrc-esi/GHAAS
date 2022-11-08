@@ -523,7 +523,7 @@ DBObjData *DBGridMerge(DBObjData *grd0Data, DBObjData *grd1Data) {
                 for (cellID = 0; cellID < net0IF->CellNum(); ++cellID) {
                     srcCell = net0IF->Cell(cellID);
                     pos = offset0 + net0IF->CellPosition(srcCell);
-                    sprintf(nameSTR, "GHAASCell:%d", cellTable->ItemNum());
+                    snprintf(nameSTR, sizeof(nameSTR), "GHAASCell:%d", cellTable->ItemNum());
                     cellRec = cellTable->Add(nameSTR);
                     positionFLD->Position(cellRec, pos);
                     toCellFLD->Int(cellRec, net0IF->CellDirection(srcCell));
@@ -542,7 +542,7 @@ DBObjData *DBGridMerge(DBObjData *grd0Data, DBObjData *grd1Data) {
                 for (cellID = 0; cellID < net1IF->CellNum(); ++cellID) {
                     srcCell = net1IF->Cell(cellID);
                     pos = offset1 + net1IF->CellPosition(srcCell);
-                    sprintf(nameSTR, "GHAASCell:%d", cellTable->ItemNum());
+                    snprintf(nameSTR, sizeof(nameSTR), "GHAASCell:%d", cellTable->ItemNum());
                     cellRec = cellTable->Add(nameSTR);
                     positionFLD->Position(cellRec, pos);
                     toCellFLD->Int(cellRec, net1IF->CellDirection(srcCell));
@@ -558,7 +558,7 @@ DBObjData *DBGridMerge(DBObjData *grd0Data, DBObjData *grd1Data) {
 
                     ((DBInt *) dataRec->Data())[pos.Row * colNum + pos.Col] = cellRec->RowID();
                 }
-                sprintf(nameSTR, "GHAASBasin%d", (DBInt) 0);
+                snprintf(nameSTR, sizeof(nameSTR), "GHAASBasin%d", (DBInt) 0);
                 basinRec = basinTable->Add(nameSTR);
                 mouthPosFLD->Position(basinRec, positionFLD->Position(cellTable->Item(0)));
                 colorFLD->Int(basinRec, 0);

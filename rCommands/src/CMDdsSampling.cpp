@@ -221,7 +221,7 @@ int main(int argc, char *argv[]) {
             else {
                 if (strncmp(CMfileExtension(argv[argPos]), "gz", 2) == 0) {
                     char pCommand[strlen(argv[argPos]) + 16];
-                    sprintf(pCommand, "gunzip -c %s", argv[argPos]);
+                    snprintf(pCommand, sizeof(pCommand), "gunzip -c %s", argv[argPos]);
                     inFile = popen(pCommand, "r");
                     compressed = true;
                 }

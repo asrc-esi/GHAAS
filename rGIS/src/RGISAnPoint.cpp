@@ -309,7 +309,7 @@ void RGISAnalysePointSTNPointsCBK (Widget widget,RGISWorkspace *workspace,XmAnyC
 		char dataName [DBDataNameLen + 5];
 		DBObjData *netData = dbData->LinkedData ();
 
-		sprintf (dataName,"%s STN",dbData->Name ());
+		snprintf (dataName, sizeof(dataName), "%s STN",dbData->Name ());
 		dbData = new DBObjData (*dbData);
 		dbData->Name (dataName);
 		if (UIDataHeaderForm (dbData))

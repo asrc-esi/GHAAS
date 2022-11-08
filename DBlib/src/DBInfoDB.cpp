@@ -195,27 +195,27 @@ public:
         switch (ItemTypeVAR) {
             case INFO_CHARACTER_TYPE:
                 format[0] = '%';
-                sprintf(format + 1, "%ds", ItemWidthVAR);
+                snprintf(format + 1, sizeof(format) - 1, "%ds", ItemWidthVAR);
                 return (new DBObjTableField(name, DBTableFieldString, format, ItemWidth() + 1));
             case INFO_INTEGER_TYPE:
                 format[0] = '%';
-                sprintf(format + 1, "%dd", OutputWidthVAR);
+                snprintf(format + 1, sizeof(format) - 1, "%dd", OutputWidthVAR);
                 return (new DBObjTableField(name, DBTableFieldInt, format, sizeof(DBInt)));
             case INFO_RECNO_TYPE:
                 format[0] = '%';
-                sprintf(format + 1, "%dd", OutputWidthVAR);
+                snprintf(format + 1, sizeof(format) - 1,"%dd", OutputWidthVAR);
                 return (new DBObjTableField(name, DBTableFieldInt, format, ItemWidth()));
             case INFO_BINARY_TYPE:
                 format[0] = '%';
-                sprintf(format + 1, "%dd", OutputWidthVAR);
+                snprintf(format + 1, sizeof(format) - 1, "%dd", OutputWidthVAR);
                 return (new DBObjTableField(name, DBTableFieldInt, format, ItemWidth()));
             case INFO_NUMBER_TYPE:
                 format[0] = '%';
-                sprintf(format + 1, "%d.%df", OutputWidthVAR, NumberDecimalsVAR);
+                snprintf(format + 1, sizeof(format) - 1, "%d.%df", OutputWidthVAR, NumberDecimalsVAR);
                 return (new DBObjTableField(name, DBTableFieldFloat, format, sizeof(DBFloat)));
             case INFO_FLOATING_TYPE:
                 format[0] = '%';
-                sprintf(format + 1, "%d.%df", OutputWidthVAR, NumberDecimalsVAR);
+                snprintf(format + 1, sizeof(format) - 1, "%d.%df", OutputWidthVAR, NumberDecimalsVAR);
                 return (new DBObjTableField(name, DBTableFieldFloat, format, ItemWidth()));
             case INFO_DATE_TYPE:
                 return (new DBObjTableField(name, DBTableFieldDate, DBHiddenField, sizeof(DBDate)));
@@ -239,8 +239,8 @@ char *DBInfoFileName(const char *workSpace, const char *infoName) {
     DBInt notFound = true;
     ARCDirRecord arcDirRecord;
 
-    sprintf(fileName, "%s/info/arcdr9", workSpace);
-    if (access(fileName, R_OK) == DBFault) sprintf(fileName, "%s/info/arc.dir", workSpace);
+    snprintf(fileName, sizeof(fileName), "%s/info/arcdr9", workSpace);
+    if (access(fileName, R_OK) == DBFault) snprintf(fileName, sizeof(fileName), "%s/info/arc.dir", workSpace);
     if ((inFile = fopen(fileName, "r")) == (FILE *) NULL) {
         CMmsgPrint(CMmsgSysError, "File Opening Error in: %s %d", __FILE__, __LINE__);
         return (NULL);
@@ -255,7 +255,7 @@ char *DBInfoFileName(const char *workSpace, const char *infoName) {
     fclose(inFile);
     if (notFound) return (NULL);
 
-    sprintf(fileName, "%s/info/", workSpace);
+    snprintf(fileName, sizeof(fileName), "%s/info/", workSpace);
     strncpy(fileName + strlen(fileName), arcDirRecord.GetExternalName(), 8);
     return (fileName);
 }
@@ -269,16 +269,16 @@ char *DBInfoFileName(const char *coverage, DBInt type) {
     workSpace[i] = '\0';
     switch (type) {
         case DBTypeVectorPoint:
-            sprintf(infoName, "%s.pat", coverage + i + 1);
+            snprintf(infoName, sizeof(infoName), "%s.pat", coverage + i + 1);
             break;
         case DBTypeVectorLine:
-            sprintf(infoName, "%s.aat", coverage + i + 1);
+            snprintf(infoName, sizeof(infoName), "%s.aat", coverage + i + 1);
             break;
         case DBTypeVectorPolygon:
-            sprintf(infoName, "%s.pat", coverage + i + 1);
+            snprintf(infoName, sizeof(infoName), "%s.pat", coverage + i + 1);
             break;
         case DBTypeGridDiscrete:
-            sprintf(infoName, "%s.vat", coverage + i + 1);
+            snprintf(infoName, sizeof(infoName), "%s.vat", coverage + i + 1);
             break;
         default:
             CMmsgPrint(CMmsgAppError, "Wrong Data Type in: %s %d", __FILE__, __LINE__);
@@ -296,8 +296,8 @@ DBInt DBInfoGetFields(DBObjTable *table, const char *infoName) {
 
     if (infoName == NULL) return (DBFault);
 
-    sprintf(fileName, "%snit", infoName);
-    if (access(fileName, R_OK) == DBFault) sprintf(fileName, "%s.nit", infoName);
+    snprintf(fileName, DBDataFileNameLen, "%snit", infoName);
+    if (access(fileName, R_OK) == DBFault) snprintf(fileName, sizeof(fileName), "%s.nit", infoName);
 
     if ((inFile = fopen(fileName, "r")) == (FILE *) NULL) {
         CMmsgPrint(CMmsgSysError, "File Opening Error in: %s %d", __FILE__, __LINE__);
@@ -320,7 +320,7 @@ static void _DBInfoGetField(DBObjTableField *field, DBObjRecord *record, ARCNitR
         case DBTableFieldInt: {
             DBInt intVAR = field->IntNoData();
             format[0] = '%';
-            sprintf(format + 1, "%dd", arcNitRecord->ItemWidth());
+            snprintf(format + 1, sizeof(format) - 1, "%dd", arcNitRecord->ItemWidth());
             switch (arcNitRecord->ItemType()) {
                 case INFO_INTEGER_TYPE:
                     sscanf((char *) infoBuffer + arcNitRecord->ItemPosition(), format, &intVAR);
@@ -354,7 +354,7 @@ static void _DBInfoGetField(DBObjTableField *field, DBObjRecord *record, ARCNitR
         case DBTableFieldFloat: {
             DBFloat floatVAR = field->FloatNoData();
             format[0] = '%';
-            sprintf(format + 1, "%df", arcNitRecord->ItemWidth());
+            snprintf(format + 1, sizeof(format) - 1, "%df", arcNitRecord->ItemWidth());
             switch (arcNitRecord->ItemType()) {
                 case INFO_NUMBER_TYPE:
                     sscanf((char *) infoBuffer + arcNitRecord->ItemPosition(), format, &floatVAR);
@@ -402,8 +402,8 @@ DBInt DBInfoGetTable(DBObjTable *table, const char *infoName) {
     DBObjTableField **fields;
     DBObjRecord *record;
 
-    sprintf(fileName, "%snit", infoName);
-    if (access(fileName, R_OK) == DBFault) sprintf(fileName, "%s.nit", infoName);
+    snprintf(fileName, sizeof(fileName), "%snit", infoName);
+    if (access(fileName, R_OK) == DBFault) snprintf(fileName, sizeof(fileName), "%s.nit", infoName);
     if ((inFile = fopen(fileName, "r")) == (FILE *) NULL) {
         CMmsgPrint(CMmsgSysError, "File Opening Error in:  %s %d", __FILE__, __LINE__);
         return (DBFault);
@@ -434,8 +434,8 @@ DBInt DBInfoGetTable(DBObjTable *table, const char *infoName) {
         fields[i] = table->Field(name);
     }
 
-    sprintf(fileName, "%sdat", infoName);
-    if (access(fileName, R_OK) == DBFault) sprintf(fileName, "%s.dat", infoName);
+    snprintf(fileName, sizeof(fileName), "%sdat", infoName);
+    if (access(fileName, R_OK) == DBFault) snprintf(fileName, sizeof(fileName), "%s.dat", infoName);
     external = DBFileSize(fileName) == 80 ? true : false;
 
     if ((inFile = fopen(fileName, "r")) == (FILE *) NULL) {
@@ -471,7 +471,7 @@ DBInt DBInfoGetTable(DBObjTable *table, const char *infoName) {
 
     for (record = table->First(); fread(buffer, recordLen, 1, inFile) == 1; record = table->Next()) {
         if (record == (DBObjRecord *) NULL)
-            sprintf(name, "Table Record: %d", table->ItemNum() + 1);
+            snprintf(name, sizeof(name), "Table Record: %d", table->ItemNum() + 1);
         table->Add(name);
         record = table->Item();
 

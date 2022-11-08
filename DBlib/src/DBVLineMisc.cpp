@@ -33,7 +33,7 @@ DBObjRecord *DBVLineIF::Node(DBCoordinate coord, DBInt create) {
     if (create) {
         char objName[DBStringLength];
 
-        sprintf(objName, "Node: %5d", NodeTable->ItemNum());
+        snprintf(objName, sizeof (objName), "Node: %5d", NodeTable->ItemNum());
         nodeRec = NodeTable->Add(objName);
         NodeCoordFLD->Coordinate(nodeRec, coord);
         return (nodeRec);

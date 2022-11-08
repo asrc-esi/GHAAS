@@ -122,7 +122,7 @@ void DBVPolyIF::FourColoring() {
     while (maxSymbol > SymbolTable->ItemNum()) SymbolTable->Add();
     for (symbol = 0; symbol < SymbolTable->ItemNum(); ++symbol) {
         symRec = SymbolTable->Item(symbol);
-        sprintf(nameStr, "Symbol:%2d", symbol);
+        snprintf(nameStr, sizeof (nameStr), "Symbol:%2d", symbol);
         symRec->Name(nameStr);
         StyleFLD->Int(symRec, 0);
         ForegroundFLD->Int(symRec, 1);

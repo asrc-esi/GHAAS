@@ -91,15 +91,15 @@ int DBImportARCPoint(DBObjData *vecData, const char *arcCov) {
     DBRegion dataExtent = vecData->Extent();
 
     floatCov = false;
-    sprintf(fileName, "%s/bnd", arcCov);
+    snprintf(fileName, sizeof(fileName), "%s/bnd", arcCov);
     if (access(fileName, R_OK)) floatCov = true;
     else {
-        sprintf(fileName, "%s/bnd.adf", arcCov);
+        snprintf(fileName, sizeof(fileName), "%s/bnd.adf", arcCov);
         if (access(fileName, R_OK)) floatCov = true;
     }
 
-    sprintf(fileName, "%s/lab", arcCov);
-    if (access(fileName, R_OK) == DBFault) sprintf(fileName, "%s/lab.adf", arcCov);
+    snprintf(fileName, sizeof(fileName), "%s/lab", arcCov);
+    if (access(fileName, R_OK) == DBFault) snprintf(fileName, DBDataFileNameLen, "%s/lab.adf", arcCov);
 
     if ((inFile = fopen(fileName, "r")) == NULL) {
         CMmsgPrint(CMmsgSysError, "File Opening Error in: %s %d", __FILE__, __LINE__);

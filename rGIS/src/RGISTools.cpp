@@ -258,7 +258,7 @@ static void _RGISToolsNetBasinMouthCBK (Widget widget,RGISWorkspace *workspace,X
 		cellRec = netIF->Cell ((DBInt) 0);
 		for (order = 0;order <= netIF->CellOrder (cellRec);++order)
 			{
-			sprintf (symName,"Strahler Order:%2d",order);
+			snprintf (symName, sizeof(symName), "Strahler Order:%2d",order);
 			symRec = symbols->Add (symName);
 			styleFLD->Int (symRec,0);
 			foregroundFLD->Int (symRec,1);

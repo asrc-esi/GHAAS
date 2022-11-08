@@ -75,7 +75,7 @@ void UIDataset(char *icon, char *ghaasMetaDB) {
 
     if (ghaasMetaDB == (char *) NULL) {
         if (getenv("GHAASMetaDB") == NULL)
-            sprintf(metaFileName, "%s/GHAASMetadb", getenv("HOME"));
+            snprintf(metaFileName, sizeof(metaFileName), "%s/GHAASMetadb", getenv("HOME"));
         else strcpy(metaFileName, getenv("GHAASMetaDB"));
         ghaasMetaDB = metaFileName;
     }
@@ -93,7 +93,7 @@ Widget UIInitialize(char *title, char *icon, char *helpFile, UIMenuItem mainMenu
     void _UIColorInitialize(Widget);
     void _UIGlobeInitialize(Widget, int, Pixel, DBInt);
 
-    sprintf(applicationTitle, "%s %s", title, UICopyRightText);
+    snprintf(applicationTitle, sizeof(applicationTitle), "%s %s", title, UICopyRightText);
     _UITopLevel = XtVaAppInitialize(&_UIApplicationContext, "ghaas", (XrmOptionDescRec *) NULL, 0, argc, argv, NULL,
                                     XmNminWidth, reqWidth,
                                     XmNmaxWidth, reqWidth,

@@ -694,12 +694,12 @@ DBInt RGlibGridMakeDiscrete(DBObjData *srcData, DBObjData *dstData, float binVal
     for (bin = 0; bin < binNum; ++bin) {
         if (bin == 0) {
             memset(textFormat, (int) ' ', dstBinField->FormatWidth());
-            sprintf(textFormat + dstBinField->FormatWidth(), " < %s", binFormat);
-            sprintf(binText, textFormat, binValues[bin]);
+            snprintf(textFormat + dstBinField->FormatWidth(), sizeof(textFormat) - dstBinField->FormatWidth(), " < %s", binFormat);
+            snprintf(binText, sizeof(binText), textFormat, binValues[bin]);
         }
         else {
-            sprintf(textFormat, "%s - %s", binFormat, binFormat);
-            sprintf(binText, textFormat, binValues[bin - 1], binValues[bin]);
+            snprintf(textFormat, sizeof(textFormat), "%s - %s", binFormat, binFormat);
+            snprintf(binText, sizeof(binText), textFormat, binValues[bin - 1], binValues[bin]);
         }
         record = dstItemTable->Add(binText);
         dstGValField->Int(record, bin);
@@ -1234,10 +1234,10 @@ DBInt RGlibCycleMean(DBObjData *tsData, DBObjData *data, DBInt cycleStepNum, DBI
         return (DBFault);
     }
 
-    sprintf(recordName, "Layer: %2d", 0);
+    snprintf(recordName, sizeof(recordName), "Layer: %2d", 0);
     gridIF->RenameLayer(gridIF->Layer((DBInt) 0), recordName);
     for (step = 1; step < cycleStepNum; ++step) {
-        sprintf(recordName, "Layer: %2d", step);
+        snprintf(recordName, sizeof(recordName), "Layer: %2d", step);
         gridIF->AddLayer(recordName);
     }
 
@@ -1469,15 +1469,15 @@ DBInt RGlibSeasonAggregate(DBObjData *tsData, DBObjData *data, DBInt seasonLen, 
 
     layerRec = gridIF->Layer(0);
     startYear = year = sDate.Year();
-    if (year != DBDefaultMissingIntVal) sprintf(layerName, "%4d-Season", year);
-    else sprintf(layerName, "XXXX-Season");
+    if (year != DBDefaultMissingIntVal) snprintf(layerName, sizeof(layerName), "%4d-Season", year);
+    else snprintf(layerName, sizeof(layerName), "XXXX-Season");
     gridIF->RenameLayer(layerRec, layerName);
     for (step = 1; step < stepNum; ++step) {
         if (startYear != DBDefaultMissingIntVal) {
             year = step / seasonNum;
-            sprintf(layerName, "%4d-Season", year + startYear);
+            snprintf(layerName, sizeof(layerName), "%4d-Season", year + startYear);
         }
-        else sprintf(layerName, "XXXX-Season");
+        else snprintf(layerName, sizeof(layerName), "XXXX-Season");
         gridIF->AddLayer(layerName);
     }
 
@@ -1489,7 +1489,7 @@ DBInt RGlibSeasonAggregate(DBObjData *tsData, DBObjData *data, DBInt seasonLen, 
         layerRec = gridIF->Layer(step);
         strcpy(layerName, layerRec->Name());
         for (month = offset; month < 12 + offset; month++)
-            if (monthSeason[month % 12] == season) sprintf(layerName + strlen(layerName), "_%02d", (month % 12) + 1);
+            if (monthSeason[month % 12] == season) snprintf(layerName + strlen(layerName), sizeof(layerName) - strlen(layerName), "_%02d", (month % 12) + 1);
         gridIF->RenameLayer(layerRec, layerName);
     }
 
@@ -1586,10 +1586,10 @@ DBInt RGlibSeasonMean(DBObjData *tsData, DBObjData *data, DBInt seasonLen, DBInt
     if (tsGridIF->LayerNum() < seasonNum) goto End;
 
     layerRec = gridIF->Layer(0);
-    sprintf(layerName, "XXXX-Season");
+    snprintf(layerName, sizeof(layerName), "XXXX-Season");
     gridIF->RenameLayer(layerRec, layerName);
     for (season = 1; season < seasonNum; ++season) {
-        sprintf(layerName, "XXXX-Season");
+        snprintf(layerName, sizeof(layerName), "XXXX-Season");
         gridIF->AddLayer(layerName);
     }
 
@@ -1598,7 +1598,7 @@ DBInt RGlibSeasonMean(DBObjData *tsData, DBObjData *data, DBInt seasonLen, DBInt
         monthSeason[((month + offset > 0 ? month : month + 12) + offset) % 12] = season;
         layerRec = gridIF->Layer(season);
         strcpy(layerName, layerRec->Name());
-        sprintf(layerName + strlen(layerName), "_%02d",
+        snprintf(layerName + strlen(layerName), sizeof(layerName) - strlen(layerName), "_%02d",
                 (((month + offset > 0 ? month : month + 12) + offset) % 12) + 1);
         gridIF->RenameLayer(layerRec, layerName);
     }

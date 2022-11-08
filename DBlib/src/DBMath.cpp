@@ -16,7 +16,7 @@ bfekete@gc.cuny.edu
 #include <DB.hpp>
 
 char *DBMathIntAutoFormat(DBInt maxVal) {
-    static char format[12];
+    static char format[DBStringLength];
     DBInt length;
 
     if (maxVal == 0) strcpy(format, "%2d");
@@ -24,13 +24,13 @@ char *DBMathIntAutoFormat(DBInt maxVal) {
         length = (DBInt) (ceil(log10((double) (abs(maxVal)))));
         if (maxVal < 0) length++;
         format[0] = '%';
-        sprintf(format + 1, "%dd", length);
+        snprintf(format + 1, sizeof(format) - 1, "%dd", length);
     }
     return (format);
 }
 
 char *DBMathFloatAutoFormat(DBFloat maxVal) {
-    static char format[12];
+    static char format[DBStringLength];
     DBInt i, length, decimals;
 
     i = (DBInt) (ceil(log10(fabs(maxVal))));
@@ -40,7 +40,7 @@ char *DBMathFloatAutoFormat(DBFloat maxVal) {
     else             { decimals = 0;         length = i; }
     length += (decimals > 0 ? 2 : 1);
     format[0] = '%';
-    sprintf(format + 1, "%d.%df", length, decimals);
+    snprintf(format + 1, sizeof(format) - 1, "%d.%df", length, decimals);
     return (format);
 }
 

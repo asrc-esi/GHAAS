@@ -45,7 +45,7 @@ bfekete@gc.cuny.edu
 static void _UITableFieldEditWidthScale(Widget widget, DBInt value) {
     char numberString[13];
 
-    sprintf(numberString, "%d", value);
+    snprintf(numberString, sizeof(numberString), "%d", value);
     UIAuxSetLabelString(widget, numberString);
 }
 
@@ -76,7 +76,7 @@ static void _UITableFieldEditDisplayWidgets(Widget mainForm, DBObjTableField *fi
                                   XmNmenuHistory, XtNameToWidget(mainForm, UITableFieldEditSizeLongButton), NULL);
                     break;
             }
-            sprintf(noDataString, "%f", field->FloatNoData());
+            snprintf(noDataString, sizeof(noDataString), "%f", field->FloatNoData());
             XmTextFieldSetString(XtNameToWidget(mainForm, UITableFieldEditFieldNodataTextF), noDataString);
             break;
         case DBTableFieldInt:
@@ -104,7 +104,7 @@ static void _UITableFieldEditDisplayWidgets(Widget mainForm, DBObjTableField *fi
                                   XmNmenuHistory, XtNameToWidget(mainForm, UITableFieldEditSizeLongButton), NULL);
                     break;
             }
-            sprintf(noDataString, "%d", field->IntNoData());
+            snprintf(noDataString, sizeof(noDataString), "%d", field->IntNoData());
             XmTextFieldSetString(XtNameToWidget(mainForm, UITableFieldEditFieldNodataTextF), noDataString);
             break;
         case DBTableFieldString:

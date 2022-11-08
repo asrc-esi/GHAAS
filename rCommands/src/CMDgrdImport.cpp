@@ -416,7 +416,7 @@ int main(int argc, char *argv[]) {
             if (buffer[strlen(buffer) - 1] == '\n') buffer[strlen(buffer) - 1] = '\0';
             if (buffer[0] == '/') strncpy(fileName, buffer, sizeof(fileName) - 1);
             else
-                sprintf(fileName, "%s%s", listFileName, buffer);
+                snprintf(fileName, sizeof(fileName), "%s%s", listFileName, buffer);
             for (i = strlen(fileName) - 1; (i > 0) && fileName[i] != '/'; --i);
             if (fileName[i] == '/') ++i;
             strncpy(recordName, fileName + i, sizeof(recordName) - 1);
@@ -615,7 +615,7 @@ int main(int argc, char *argv[]) {
                         break;
                 }
                 if (intVal != (DBInt) missingVal) {
-                    sprintf(buffer, "Category%010d", intVal);
+                    snprintf(buffer, sizeof(buffer), "Category%010d", intVal);
                     if ((itemRec = itemTable->Item(buffer)) == (DBObjRecord *) NULL) {
                         if ((itemRec = itemTable->Add(buffer)) == (DBObjRecord *) NULL) {
                             CMmsgPrint(CMmsgAppError, "Item Object Creation Error in: %s %d", __FILE__, __LINE__);

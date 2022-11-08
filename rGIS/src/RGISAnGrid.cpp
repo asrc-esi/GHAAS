@@ -347,7 +347,7 @@ void RGISAnGContPitsCBK (Widget widget,RGISWorkspace *workspace,XmAnyCallbackStr
 		items->AddField (depthFLD);
 		items->AddField (elevFLD);
 		items->AddField (subbasinAreaFLD);
-		sprintf (name,"Pit Pour Point");
+		snprintf (name, sizeof(name), "Pit Pour Point");
 		symRec = symbols->Add (name);
 		foregroundFLD->Int (symRec,1);
 		backgroundFLD->Int (symRec,0);
@@ -365,7 +365,7 @@ void RGISAnGContPitsCBK (Widget widget,RGISWorkspace *workspace,XmAnyCallbackStr
 				{
 				if (pitVolumeFLD->Float (cellRec) > 0.0)
 					{
-					sprintf (name,"STN Pit:%04d",items->ItemNum ());
+					snprintf (name, sizeof(name), "STN Pit:%04d",items->ItemNum ());
 					pntRec = items->Add (name);
 					coord = netIF->Center (cellRec);
 					coordField->Coordinate (pntRec,coord);

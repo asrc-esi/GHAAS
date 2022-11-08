@@ -263,8 +263,8 @@ int RGlibGenFuncSymbolField(DBObjData *data, const char *fieldName) {
         record = table->Item(recID);
         DBPause(record->RowID() * 100 / table->ItemNum());
 
-        if (field->Type() == DBTableFieldString) sprintf(symbolName, "%s", field->String(record));
-        else sprintf(symbolName, "Symbol:%03d", field->Int(record));
+        if (field->Type() == DBTableFieldString) snprintf(symbolName, sizeof(symbolName), "%s", field->String(record));
+        else snprintf(symbolName, sizeof(symbolName), "Symbol:%03d", field->Int(record));
         if ((symbolRec = (DBObjRecord *) symbols->Item(symbolName)) == (DBObjRecord *) NULL) {
             if ((symbolRec = symbols->Add(symbolName)) == NULL) {
                 CMmsgPrint(CMmsgAppError, "Symbol Object Creation Error in: %s %d", __FILE__, __LINE__);

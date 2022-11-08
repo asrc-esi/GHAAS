@@ -167,11 +167,11 @@ Help:   if (CMargTest (argv[argPos], "-h", "--help")) {
             strcpy(coordStr, "");
         else if ((minField == (DBObjTableField *) NULL) ||
                  ((min = minField->Int(record)) == minField->IntNoData()))
-            sprintf(coordStr, "%4d", deg);
+            snprintf(coordStr, sizeof(coordStr), "%4d", deg);
         else if ((secField == (DBObjTableField *) NULL) ||
                  ((sec = secField->Int(record)) == secField->IntNoData()))
-            sprintf(coordStr, "%4d:%02d", deg, min);
-        else sprintf(coordStr, "%4d:%02d\'%02d\"", deg, min, sec);
+            snprintf(coordStr, sizeof(coordStr), "%4d:%02d", deg, min);
+        else snprintf(coordStr, sizeof(coordStr), "%4d:%02d\'%02d\"", deg, min, sec);
         dstField->String(record, coordStr);
     }
 

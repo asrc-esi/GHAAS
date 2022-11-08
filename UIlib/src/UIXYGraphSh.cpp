@@ -51,7 +51,7 @@ UIXYGraphShell::UIXYGraphShell(DBObjData *dbData) : DBObject(UIXYGraphShellStr, 
     Arg wargs[20];
     Atom deleteWindowAtom = XmInternAtom(XtDisplay(UITopLevel()), (char *) "WM_DELETE_WINDOW", FALSE);
 
-    sprintf(title, "XYGraph: %s", dbData->Name());
+    snprintf(title, sizeof(title), "XYGraph: %s", dbData->Name());
     DShell = XtVaCreatePopupShell("UIXYGraphShellPopupShell", xmDialogShellWidgetClass, UITopLevel(),
                                   XmNkeyboardFocusPolicy, XmPOINTER,
                                   XmNallowShellResize, false,

@@ -84,7 +84,7 @@ DBInt RGlibNetworkToGrid(DBObjData *netData, DBObjTableField *field, DBObjData *
                     if ((intVal = field->Int(cellRec)) == field->IntNoData())
                         gridIF->Value(netIF->CellPosition(cellRec), DBFault);
                     else {
-                        sprintf(nameStr, "Category%04d", intVal);
+                        snprintf(nameStr, sizeof(nameStr), "Category%04d", intVal);
                         if ((itemRec = itemTable->Item(nameStr)) == (DBObjRecord *) NULL) {
                             if ((itemRec = itemTable->Add(nameStr)) == (DBObjRecord *) NULL) {
                                 CMmsgPrint(CMmsgAppError, "Item Object Creation Error in: %s %d", __FILE__, __LINE__);
@@ -193,7 +193,7 @@ DBInt RGlibNetworkBasinGrid(DBObjData *netData, DBObjData *grdData) {
     }
     symTable->DeleteAll();
     for (symbol = 0; symbol < symMax; ++symbol) {
-        sprintf(symbolName, "Symbol %2d", symbol + 1);
+        snprintf(symbolName, sizeof(symbolName), "Symbol %2d", symbol + 1);
         symRec = symTable->Add(symbolName);
         gFGSymFLD->Int(symRec, 7 + symbol);
         gBGSymFLD->Int(symRec, symbol);
@@ -272,7 +272,7 @@ DBInt RGlibNetworkStations(DBObjData *netData, DBFloat area, DBFloat tolerance, 
                 do areaARR[toCell->RowID()] -= areaARR[cellID];
                 while ((toCell = netIF->ToCell(toCell)) != (DBObjRecord *) NULL);
 
-            sprintf(name, "Point: %d", items->ItemNum());
+            snprintf(name, sizeof(name), "Point: %d", items->ItemNum());
             items->Add(name);
             pntRec = items->Item();
             coord = netIF->Center(netIF->Cell(cellID));
@@ -918,7 +918,7 @@ DBInt RGlibNetworkConfluences(DBObjData *netData, DBObjData *outPntData) {
             break;
     }
     for (cellOrder = minOrder; cellOrder < maxOrder; ++cellOrder) {
-        sprintf(recordName, "Order: %2d", cellOrder + 1);
+        snprintf(recordName, sizeof(recordName), "Order: %2d", cellOrder + 1);
         pntIF->NewSymbol(recordName);
     }
     for (cellId = 0; cellId < netIF->CellNum(); ++cellId) {
@@ -927,7 +927,7 @@ DBInt RGlibNetworkConfluences(DBObjData *netData, DBObjData *outPntData) {
         if (((toCellRec = netIF->ToCell(cellRec)) != (DBObjRecord *) NULL) &&
             (netIF->CellOrder(toCellRec) == cellOrder))
             continue;
-        sprintf(recordName, "Confluence%010d", pntId++);
+        snprintf(recordName, sizeof(recordName), "Confluence%010d", pntId++);
         pntRec = pntIF->NewItem(recordName);
         pntIF->Coordinate(pntRec, netIF->Center(cellRec));
         pntIF->ItemSymbol(pntRec, pntIF->Symbol(cellOrder - 1));
@@ -1309,7 +1309,7 @@ DBInt RGlibNetworkHistogram(DBObjData *netData, DBObjData *grdData, DBObjData *t
             area = areaFLD->Float(tblRec);
             basinID = basinIDFLD->Int(tblRec);
         }
-        sprintf(string, "Basin:%04d Histogram:%06d", basinID, i++);
+        snprintf(string, sizeof(string), "Basin:%04d Histogram:%06d", basinID, i++);
         percentFLD->Float(tblRec, 100.0 * areaFLD->Float(tblRec) / area);
     }
     Stop:
@@ -1636,7 +1636,7 @@ public:
         char objName [DBStringLength];
         DBObjRecord *toCellRec = NetIF->ToCell (cellRec), *lineRec;
 
-        sprintf (objName,"Line: %5d", ++LineID);
+        snprintf (objName, sizeof(objName), "Line: %5d", ++LineID);
         if ((lineRec = LineIF->NewItem (objName)) == (DBObjRecord *) NULL)
         { CMmsgPrint (CMmsgAppError, "Line Insertion Error in: %s %d",__FILE__,__LINE__); return (CMfailed); }
         BasinFLD->Int (lineRec,NetIF->CellBasinID (cellRec));

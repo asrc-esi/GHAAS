@@ -77,7 +77,7 @@ int UI2DView::DrawMesh() {
     my = viewLL.Y;
     maxWidth = 0;
     for (mx = trans.X; mx < viewUR.X; mx += mesh) {
-        sprintf(string, formatStr, mx);
+        snprintf(string, sizeof(string), formatStr, mx);
         xmString = XmStringCreate(string, UICharSetNormal);
         XmStringExtent(UISmallFontList(), xmString, &width, &height);
         XmStringFree(xmString);
@@ -86,7 +86,7 @@ int UI2DView::DrawMesh() {
 
     for (mx = trans.X; mx < viewUR.X; mx += mesh) {
         Map2Window(mx, my, &wx, &wy);
-        sprintf(string, formatStr, mx);
+        snprintf(string, sizeof(string), formatStr, mx);
         xmString = XmStringCreate(string, UICharSetNormal);
         XmStringExtent(UISmallFontList(), xmString, &width, &height);
         XmStringDraw(XtDisplay(DrawingAreaW), XtWindow(DrawingAreaW), UISmallFontList(), xmString,
@@ -96,7 +96,7 @@ int UI2DView::DrawMesh() {
     mx = viewUR.X;
     for (my = trans.Y; my < viewUR.Y; my += mesh) {
         Map2Window(mx, my, &wx, &wy);
-        sprintf(string, formatStr, my);
+        snprintf(string, sizeof(string), formatStr, my);
         xmString = XmStringCreate(string, UICharSetNormal);
         XmStringExtent(UISmallFontList(), xmString, &width, &height);
         XmStringDraw(XtDisplay(DrawingAreaW), XtWindow(DrawingAreaW), UISmallFontList(), xmString,

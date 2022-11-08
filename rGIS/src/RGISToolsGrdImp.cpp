@@ -553,15 +553,15 @@ void RGISToolsImportGridCBK (Widget widget,RGISWorkspace *workspace,XmAnyCallbac
 
 		XtAddCallback (UIDialogFormGetOkButton (dShell),XmNactivateCallback,(XtCallbackProc) UIAuxSetBooleanTrueCBK,&proc);
 	}
-	sprintf (buffer,"%d",llCellCol);
+	snprintf (buffer, sizeof(buffer), "%d",llCellCol);
 	XmTextFieldSetString (llCellColFLD,buffer);
-	sprintf (buffer,"%d",llCellRow);
+	snprintf (buffer, sizeof(buffer), "%d",llCellRow);
 	XmTextFieldSetString (llCellRowFLD,buffer);
-	sprintf (buffer,"%d",skipHeader);
+	snprintf (buffer, sizeof(buffer), "%d",skipHeader);
 	XmTextFieldSetString (skipHeaderFLD,buffer);
-	sprintf (buffer,"%d",skipPad);
+	snprintf (buffer, sizeof(buffer), "%d",skipPad);
 	XmTextFieldSetString (skipPadFLD,buffer);
-	sprintf (buffer,"%3.1f",missingVal);
+	snprintf (buffer, sizeof(buffer), "%3.1f",missingVal);
 	XmTextFieldSetString (missingValFLD,buffer);
 
 	proc = false;
@@ -685,7 +685,7 @@ void RGISToolsImportGridCBK (Widget widget,RGISWorkspace *workspace,XmAnyCallbac
 					if (buffer [strlen (buffer) - 1] == '\n') buffer [strlen (buffer) - 1] = '\0';
 					if (buffer [0] == '/')	strncpy (fileName,buffer,sizeof (fileName) - 1);
 					else
-						sprintf (fileName,"%s%s",listFileName,buffer);
+						snprintf (fileName, sizeof(fileName), "%s%s",listFileName,buffer);
 					for (i = strlen (fileName) - 1;(i > 0) && fileName [i] != '/';--i);
 					if (fileName [i] == '/') ++i;
 					strncpy (recordName,fileName + i,sizeof (recordName) - 1);
@@ -831,7 +831,7 @@ void RGISToolsImportGridCBK (Widget widget,RGISWorkspace *workspace,XmAnyCallbac
                     		default: intVal = (DBInt) (*((DBInt *)   ((char *) dataRec->Data() + item * itemSize))); break;
                 		}
                 		if (intVal != (DBInt) missingVal) {
-                    		sprintf(buffer, "Category%010d", intVal);
+                    		snprintf(buffer, sizeof(buffer), "Category%010d", intVal);
                     		if ((itemRec = itemTable->Item(buffer)) == (DBObjRecord *) NULL) {
                         		if ((itemRec = itemTable->Add(buffer)) == (DBObjRecord *) NULL) {
                             		CMmsgPrint(CMmsgAppError, "Item Object Creation Error in: %s %d", __FILE__, __LINE__);

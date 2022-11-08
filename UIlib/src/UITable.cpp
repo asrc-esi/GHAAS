@@ -31,7 +31,7 @@ bfekete@gc.cuny.edu
 
 char *UITableName(const DBObjData *dbData, const DBObjTable *table) {
     static char tableName[DBDataFileNameLen + sizeof(UITableTitle) + 3];
-    sprintf(tableName, "%s:  %s of %s", UITableTitle, table->Name(), dbData->Name());
+    snprintf(tableName, sizeof(tableName), "%s:  %s of %s", UITableTitle, table->Name(), dbData->Name());
     return (tableName);
 }
 
@@ -731,7 +731,7 @@ void UITableRecord::Draw() {
     XtVaGetValues(RecordLeftMenuBarWGT, XmNchildren, &buttons,
                   XmNforeground, &background,
                   NULL);
-    sprintf(numberString, "%9d", RecordPTR->RowID() + 1);
+    snprintf(numberString, sizeof(numberString), "%9d", RecordPTR->RowID() + 1);
     background = (RecordPTR->Flags() & DBObjectFlagSelected) == DBObjectFlagSelected ?
                  UIColor(UIColorStandard, 7) : background;
     UIAuxSetLabelString(buttons[0], numberString);

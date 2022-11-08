@@ -77,7 +77,7 @@ public:
         FormWGT = XtVaCreateWidget("UIDataPropertiesForm", xmFormWidgetClass, widget,
                                    XmNshadowThickness, 1,
                                    NULL);
-        sprintf(formLabel, "%s Properties", typeString);
+        snprintf(formLabel, sizeof(formLabel), "%s Properties", typeString);
         string = XmStringCreate(formLabel, UICharSetBold);
         LabelWGT = XtVaCreateManagedWidget("UIDataPropertiesLabel", xmLabelWidgetClass, FormWGT,
                                            XmNtopAttachment, XmATTACH_FORM,
@@ -101,8 +101,8 @@ static void UIDataPropPrecision(Widget widget, int value) {
 
     XtVaGetValues(widget, XmNuserData, &label, NULL);
     formatString[0] = '%';
-    sprintf(formatString + 1, "%d.%df", 8, value > 0 ? 0 : value == 0 ? 1 : 0 - value);
-    sprintf(numberString, formatString, pow((double) 10.0, (double) value));
+    snprintf(formatString + 1, sizeof(formatString), "%d.%df", 8, value > 0 ? 0 : value == 0 ? 1 : 0 - value);
+    snprintf(numberString,     sizeof(numberString), formatString, pow((double) 10.0, (double) value));
     UIAuxSetLabelString(label, numberString);
 }
 
@@ -115,9 +115,9 @@ static void UIDataPropScale(Widget widget, int value) {
     Widget label;
 
     XtVaGetValues(widget, XmNuserData, &label, NULL);
-    sprintf(formatString, "1: %d.0f", value);
+    snprintf(formatString, sizeof(formatString), "1: %d.0f", value);
     formatString[2] = '%';
-    sprintf(numberString, formatString, pow((double) 10.0, (double) value));
+    snprintf(numberString, sizeof(numberString), formatString, pow((double) 10.0, (double) value));
     UIAuxSetLabelString(label, numberString);
 }
 
@@ -420,13 +420,13 @@ public:
         Widget menu, *buttons;
 
         extent = data->Extent();
-        sprintf(numberString, "%12.3f", extent.LowerLeft.X);
+        snprintf(numberString, sizeof(numberString), "%12.3f", extent.LowerLeft.X);
         UIAuxSetLabelString(ExtentLLHorLabelWGT, numberString);
-        sprintf(numberString, "%12.3f", extent.LowerLeft.Y);
+        snprintf(numberString, sizeof(numberString), "%12.3f", extent.LowerLeft.Y);
         UIAuxSetLabelString(ExtentLLVerLabelWGT, numberString);
-        sprintf(numberString, "%12.3f", extent.UpperRight.X);
+        snprintf(numberString, sizeof(numberString), "%12.3f", extent.UpperRight.X);
         UIAuxSetLabelString(ExtentURHorLabelWGT, numberString);
-        sprintf(numberString, "%12.3f", extent.UpperRight.Y);
+        snprintf(numberString, sizeof(numberString), "%12.3f", extent.UpperRight.Y);
         UIAuxSetLabelString(ExtentURVerLabelWGT, numberString);
 
         XtVaGetValues(ProjectionMenuWGT, XmNsubMenuId, &menu, NULL);
@@ -537,14 +537,14 @@ public:
         DBObjectLIST<DBObjTableField> *fields = table->Fields();
         DBObjTableField *field;
 
-        sprintf(numberString, "%d", table->ItemNum());
+        snprintf(numberString, sizeof(numberString), "%d", table->ItemNum());
         UIAuxSetLabelString(ItemNumLabelWGT, numberString);
         fieldNum = table->ItemNum();
 
         fieldNum = fields->ItemNum();
         for (field = fields->First(); field != (DBObjTableField *) NULL; field = fields->Next())
             if (DBTableFieldIsVisible(field) == false) fieldNum--;
-        sprintf(numberString, "%d", fieldNum);
+        snprintf(numberString, sizeof(numberString), "%d", fieldNum);
         UIAuxSetLabelString(FieldNumLabelWGT, numberString);
         XtManageChild(Form());
         return (Form());
@@ -768,19 +768,16 @@ public:
              button < (int) (sizeof(_UIDataPropContinuousColors) / sizeof(UIDataPropContinuousColor)); ++button)
             if (_UIDataPropContinuousColors[button].IsColor(ColorVAR))
                 XtVaSetValues(ColorMenuWGT, XmNmenuHistory, buttons[button], NULL);
-        sprintf(numberString, "%8d", colNumFLD->Int(record));
+        snprintf(numberString, sizeof(numberString), "%8d", colNumFLD->Int(record));
         UIAuxSetLabelString(ColNumLabelWGT, numberString);
-        sprintf(numberString, "%8d", rowNumFLD->Int(record));
+        snprintf(numberString, sizeof(numberString), "%8d", rowNumFLD->Int(record));
         UIAuxSetLabelString(RowNumLabelWGT, numberString);
-
-        sprintf(numberString, "%8.3f", cellWidthFLD->Float(record));
+        snprintf(numberString, sizeof(numberString), "%8.3f", cellWidthFLD->Float(record));
         UIAuxSetLabelString(CellWidthLabelWGT, numberString);
-        sprintf(numberString, "%8.3f", cellHeightFLD->Float(record));
+        snprintf(numberString, sizeof(numberString), "%8.3f", cellHeightFLD->Float(record));
         UIAuxSetLabelString(CellHeightLabelWGT, numberString);
-
-        sprintf(numberString, "%8d", layerTable->ItemNum());
+        snprintf(numberString, sizeof(numberString), "%8d", layerTable->ItemNum());
         UIAuxSetLabelString(LayerNumLabelWGT, numberString);
-
         XtManageChild(Form());
         return (Form());
     }
@@ -963,19 +960,19 @@ public:
         DBObjTableField *cellHeightFLD = layerTable->Field(DBrNCellHeight);
         DBObjRecord *record = layerTable->Item();
 
-        sprintf(numberString, "%8d", colNumFLD->Int(record));
+        snprintf(numberString, sizeof(numberString), "%8d", colNumFLD->Int(record));
         UIAuxSetLabelString(ColNumLabelWGT, numberString);
-        sprintf(numberString, "%8d", rowNumFLD->Int(record));
+        snprintf(numberString, sizeof(numberString), "%8d", rowNumFLD->Int(record));
         UIAuxSetLabelString(RowNumLabelWGT, numberString);
 
-        sprintf(numberString, "%8.3f", cellWidthFLD->Float(record));
+        snprintf(numberString, sizeof(numberString), "%8.3f", cellWidthFLD->Float(record));
         UIAuxSetLabelString(CellWidthLabelWGT, numberString);
-        sprintf(numberString, "%8.3f", cellHeightFLD->Float(record));
+        snprintf(numberString, sizeof(numberString), "%8.3f", cellHeightFLD->Float(record));
         UIAuxSetLabelString(CellHeightLabelWGT, numberString);
 
-        sprintf(numberString, "%d", basinTable->ItemNum());
+        snprintf(numberString, sizeof(numberString), "%d", basinTable->ItemNum());
         UIAuxSetLabelString(BasinNumLabelWGT, numberString);
-        sprintf(numberString, "%d", cellTable->ItemNum());
+        snprintf(numberString, sizeof(numberString), "%d", cellTable->ItemNum());
         UIAuxSetLabelString(CellNumLabelWGT, numberString);
 
         XtManageChild(Form());

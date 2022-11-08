@@ -584,31 +584,31 @@ static DBInt _DBExportNetCDFTimeDefine(DBObjData *dbData, int ncid, int dimids[]
             strcpy(timeStr, (gridIF->Layer(0))->Name());
             if (strncmp(timeStr, "XXXX", 4) == 0) for (i = 0; i < 4; i++) timeStr[i] = '0';
             sscanf(timeStr, "%4d", &year);
-            sprintf(unitStr, "years since %s-01-01 00:00", timeStr);
+            snprintf(unitStr, NC_MAX_NAME, "years since %s-01-01 00:00", timeStr);
             break;
         case  7:
             strcpy(timeStr, (gridIF->Layer(0))->Name());
             if (strncmp(timeStr, "XXXX", 4) == 0) for (i = 0; i < 4; i++) timeStr[i] = '0';
             sscanf(timeStr, "%4d-%2d", &year, &month);
-            sprintf(unitStr, "months since %s-01 00:00", timeStr);
+            snprintf(unitStr, NC_MAX_NAME, "months since %s-01 00:00", timeStr);
             break;
         case 10:
             strcpy(timeStr, (gridIF->Layer(0))->Name());
             if (strncmp(timeStr, "XXXX", 4) == 0) for (i = 0; i < 4; i++) timeStr[i] = '0';
             sscanf(timeStr, "%4d-%2d-%2d", &year, &month, &day);
-            sprintf(unitStr, "days since %s 00:00", timeStr);
+            snprintf(unitStr, sizeof(unitStr), "days since %s 00:00", timeStr);
             break;
         case 13:
             strcpy(timeStr, (gridIF->Layer(0))->Name());
             if (strncmp(timeStr, "XXXX", 4) == 0) for (i = 0; i < 4; i++) timeStr[i] = '0';
             sscanf(timeStr, "%4d-%2d-%2d %2d", &year, &month, &day, &hour);
-            sprintf(unitStr, "hours since %s:00", timeStr);
+            snprintf(unitStr, sizeof(unitStr), "hours since %s:00", timeStr);
             break;
         case 16:
             strcpy(timeStr, (gridIF->Layer(0))->Name());
             if (strncmp(timeStr, "XXXX", 4) == 0) for (i = 0; i < 4; i++) timeStr[i] = '0';
             sscanf(timeStr, "%4d-%2d-%2d %2d:%2d", &year, &month, &day, &hour, &minute);
-            sprintf(unitStr, "minutes since %s", timeStr);
+            snprintf(unitStr, sizeof(unitStr), "minutes since %s", timeStr);
             break;
         default:
             unitStr[0] = '\0';
@@ -981,8 +981,8 @@ static DBInt _DBExportNetCDFTable(DBObjTable *table, int ncid) {
                 int rvarid, cvarid;
                 DBPosition pos;
 
-                sprintf(rowName, "%s_row", fieldName);
-                sprintf(colName, "%s_col", fieldName);
+                snprintf(rowName, sizeof(rowName), "%s_row", fieldName);
+                snprintf(colName, sizeof(colName), "%s_col", fieldName);
                 if (((status = nc_def_var(ncid, rowName, NC_INT, (int) 1, dimids, &rvarid)) == NC_NOERR) &&
                     ((status = nc_def_var(ncid, colName, NC_INT, (int) 1, dimids, &cvarid)) == NC_NOERR) &&
                     ((status = nc_enddef(ncid)) == NC_NOERR)) {
@@ -1896,7 +1896,8 @@ DBInt DBImportNetCDF(DBObjData *data, const char *filename) {
 				}
 			else varUnit [attlen] = '\0';
 			TODO: Handle variable unit!
-*/            if ((status = nc_get_att_double(ncid, id, "_FillValue", &fillValue)) != NC_NOERR) fillValue = -9999.0;
+*/
+          if ((status = nc_get_att_double(ncid, id, "_FillValue", &fillValue)) != NC_NOERR) fillValue = -9999.0;
             if (((status = nc_get_att_double(ncid, id, "missing_value", &missingValue)) != NC_NOERR) ||
                 CMmathEqualValues(fillValue, missingValue))
                 missingValue = -9999.0; // TODO I am not sure if it is a good idea.
@@ -2012,22 +2013,22 @@ DBInt DBImportNetCDF(DBObjData *data, const char *filename) {
             if (doTimeUnit) {
                 ut_decode_time(cv_convert_double(cvConverter, timeSteps[layerID]), &year, &month, &day, &hour, &minute,
                                &second, &resolution);
-                if (year > 1) sprintf(layerName, "%04d", year); else sprintf(layerName, "XXXX");
+                if (year > 1) snprintf(layerName, sizeof(layerName), "%04d", year); else snprintf(layerName, sizeof(layerName), "XXXX");
                 if (strncmp(timeString, "month", strlen("month")) == 0)
-                    sprintf(layerName + strlen(layerName), "-%02d", month + (day > 15 ? 1 : 0));
+                    snprintf(layerName + strlen(layerName), sizeof(layerName), "-%02d", month + (day > 15 ? 1 : 0));
                 else if (strncmp(timeString, "day", strlen("day")) == 0)
-                    sprintf(layerName + strlen(layerName), "-%02d-%02d", month, day + (hour > 12 ? 1 : 0));
+                    snprintf(layerName + strlen(layerName), sizeof(layerName), "-%02d-%02d", month, day + (hour > 12 ? 1 : 0));
                 else if (strncmp(timeString, "hour", strlen("hour")) == 0)
-                    sprintf(layerName + strlen(layerName), "-%02d-%02d %02d", month, day, hour + (minute > 30 ? 1 : 0));
+                    snprintf(layerName + strlen(layerName), sizeof(layerName), "-%02d-%02d %02d", month, day, hour + (minute > 30 ? 1 : 0));
                 else if (strncmp(timeString, "minute", strlen("minute")) == 0)
-                    sprintf(layerName + strlen(layerName), "-%02d-%02d %02d:%02d", month, day, hour,
+                    snprintf(layerName + strlen(layerName), sizeof(layerName), "-%02d-%02d %02d:%02d", month, day, hour,
                             minute + (second > 30 ? 1 : 0));
                 else
-                    sprintf(layerName, "LayerName:%04d", layerID);
+                    snprintf(layerName, sizeof(layerName), "LayerName:%04d", layerID);
             }
-            else sprintf(layerName, "LayerName:%04d", layerID);
+            else snprintf(layerName, sizeof(layerName), "LayerName:%04d", layerID);
         }
-        else sprintf(layerName, "LayerName:%04d", layerID);
+        else snprintf(layerName, sizeof(layerName), "LayerName:%04d", layerID);
 
         if ((layerRec = layerTable->Add(layerName)) == (DBObjRecord *) NULL) {
             free(vector);

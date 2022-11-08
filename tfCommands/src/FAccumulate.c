@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
                 CMmsgPrint(CMmsgSysError, "Memory Allocation Error in: %s %d", __FILE__, __LINE__);
                 break;
             }
-            sprintf (name, "\"%s\"", argStr);
+            snprintf (name, strlen(argStr) + 3, "\"%s\"", argStr);
             if ((fieldID = FGetFieldID(buffer, name)) == FFault) {
                 CMmsgPrint(CMmsgUsrError, "###Invalid Field Name: %s creating RowNumbers!###", name);
                 count = 1;
@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
                 CMmsgPrint(CMmsgSysError, "Memory Allocation Error in: %s %d", __FILE__, __LINE__);
                 break;
             }
-            sprintf (name, "\"%s\"", argStr);
+            snprintf (name, strlen(argStr) + 3, "\"%s\"", argStr);
             if ((fieldID = FGetFieldID(buffer, name)) == FFault) {
                 CMmsgPrint(CMmsgUsrError, "###Invalid Field Name: %s creating RowNumbers!###", name);
                 count = 1;

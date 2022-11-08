@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
     if (i == argc) i = 0;
 
     if (ghaasMetaDB == (char *) NULL) {
-        sprintf(metaFileName, "%s/GHAASMetadb", getenv("GHAAS_DIR") == NULL ? getenv("HOME") : getenv("GHAAS_DIR"));
+        snprintf(metaFileName, sizeof(metaFileName), "%s/GHAASMetadb", getenv("GHAAS_DIR") == NULL ? getenv("HOME") : getenv("GHAAS_DIR"));
         ghaasMetaDB = metaFileName;
     }
     dbDataset = new DBDataset((char *) "GHAASmetadb", ghaasMetaDB);

@@ -27,7 +27,7 @@ static void _UIFileSelectionOkCBK(Widget widget, char *fullPath, XmFileSelection
     if (XmStringGetLtoR(callData->value, XmSTRING_DEFAULT_CHARSET, &_UIFileName));
     else _UIFileName = NULL;
     XmStringGetLtoR(callData->dir, XmSTRING_DEFAULT_CHARSET, &dir);
-    if (callData->dir_length > callData->length) sprintf(fullPath, "%s/%s", dir, _UIFileName);
+    if (callData->dir_length > callData->length) snprintf(fullPath, DBDataFileNameLen, "%s/%s", dir, _UIFileName);
     else strcpy(fullPath, _UIFileName);
 
     _UIFileName = fullPath;

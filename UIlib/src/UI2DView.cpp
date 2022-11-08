@@ -307,7 +307,7 @@ UI2DView::UI2DView() : DBObject("Noname 2DView", sizeof(UI2DView)) {
     Atom deleteWindowAtom = XmInternAtom(XtDisplay(UITopLevel()), (char *) "WM_DELETE_WINDOW", FALSE);
 
     _UI2DViewLIST.Add(this);
-    sprintf(name, "2DView:%2d", RowID());
+    snprintf(name, sizeof(name), "2DView:%2d", RowID());
     Name(name);
     PixelMM = ((DBFloat) XDisplayHeightMM (XtDisplay(UITopLevel()),0) / (DBFloat) XDisplayHeight (XtDisplay(UITopLevel()),0));
     Image = (XImage *) NULL;

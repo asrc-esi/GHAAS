@@ -282,7 +282,7 @@ Help:   if (CMargTest (argv[argPos], "-h", "--help")) {
     else {
         if (strcmp (target + strlen(target) - 3,".gz") == 0) {
             char command [strlen(target) + 12];
-            sprintf (command,"gunzip -c %s",target);
+            snprintf (command, sizeof(command), "gunzip -c %s",target);
             if ((file = popen (command,"r")) == (FILE *) NULL) {
                 CMmsgPrint(CMmsgUsrError, "Target file opening error: %s!", argv[argPos]);
                 return (CMfailed);    
@@ -299,7 +299,7 @@ Help:   if (CMargTest (argv[argPos], "-h", "--help")) {
     for (argPos = 2; argPos < argNum; ++argPos) {
         if (strcmp (argv[argPos] + strlen(target) - 3,".gz") == 0) {
             char command [strlen(target) + 12];
-            sprintf (command,"gunzip -c %s",target);
+            snprintf (command, sizeof(command), "gunzip -c %s",target);
             if ((file = popen (command,"r")) == (FILE *) NULL) {
                 CMmsgPrint(CMmsgUsrError, "Source file opening error: %s!", argv[argPos]);
                 goto Stop;    
@@ -316,7 +316,7 @@ Help:   if (CMargTest (argv[argPos], "-h", "--help")) {
     else {
         if (strcmp (output + strlen(output) - 3,".gz") == 0) {
             char command [strlen(output) + 12];
-            sprintf (command,"gunzip -c %s",output);
+            snprintf (command, sizeof(command), "gunzip -c %s",output);
             if ((file = popen (command,"w")) == (FILE *) NULL) {
                 CMmsgPrint(CMmsgUsrError, "Output file opening error: %s!", argv[argPos]);
                 goto Stop; 

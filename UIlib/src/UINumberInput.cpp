@@ -58,7 +58,7 @@ public:
     }
 
     char *ValueString(DBFloat value) {
-        sprintf(NumberSTR, FormatSTR, value);
+        snprintf(NumberSTR, sizeof(NumberSTR), FormatSTR, value);
         return (NumberSTR);
     }
 

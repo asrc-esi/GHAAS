@@ -143,16 +143,16 @@ char *DBDate::Get() const {
     static char dateStr[DBStringLength];
 
     if ((FlagsVAR & DBTimeStepYear) == DBTimeStepYear)
-        sprintf(dateStr, "%04d", Year());
-    else sprintf(dateStr, "XXXX");
+        snprintf(dateStr, DBStringLength, "%04d", Year());
+    else snprintf(dateStr, sizeof (dateStr), "XXXX");
     if ((FlagsVAR & DBTimeStepMonth) == DBTimeStepMonth)
-        sprintf(dateStr + strlen(dateStr), "-%02d", Month() + 1);
+        snprintf(dateStr + strlen(dateStr), sizeof(dateStr) - strlen(dateStr), "-%02d", Month() + 1);
     if ((FlagsVAR & DBTimeStepDay) == DBTimeStepDay)
-        sprintf(dateStr + strlen(dateStr), "-%02d", Day() + 1);
+        snprintf(dateStr + strlen(dateStr), sizeof(dateStr) - strlen(dateStr), "-%02d", Day() + 1);
     if ((FlagsVAR & DBTimeStepHour) == DBTimeStepHour)
-        sprintf(dateStr + strlen(dateStr), " %02d", Hour());
+        snprintf(dateStr + strlen(dateStr), sizeof(dateStr) - strlen(dateStr), " %02d", Hour());
     if ((FlagsVAR & DBTimeStepMinute) == DBTimeStepMinute)
-        sprintf(dateStr + strlen(dateStr), ":%02d", Minute());
+        snprintf(dateStr + strlen(dateStr), sizeof(dateStr) - strlen(dateStr), ":%02d", Minute());
     return (dateStr);
 }
 

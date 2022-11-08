@@ -291,7 +291,7 @@ int DBObjData::Read(const char *fileName) {
     }
     else if (strncmp(CMfileExtension(fileName), "gz", 2) == 0) {
         char pCommand[strlen(fileName) + 16];
-        sprintf(pCommand, "gunzip -c %s", fileName);
+        snprintf(pCommand, sizeof(pCommand), "gunzip -c %s", fileName);
         if ((file = popen(pCommand, "r")) == (FILE *) NULL) {
             CMmsgPrint(CMmsgSysError, "File (%s) Opening Error in: %s %d", fileName, __FILE__, __LINE__);
             return (DBFault);
@@ -349,7 +349,7 @@ int DBObjData::Write(const char *fileName) {
         ret = DBExportNetCDF(this, fileName);
     else if (strncmp(CMfileExtension(fileName), "gz", 2) == 0) {
         char pCommand[strlen(fileName) + 16];
-        sprintf(pCommand, "gzip > %s", fileName);
+        snprintf(pCommand, sizeof(pCommand),"gzip > %s", fileName);
         if ((file = popen(pCommand, "w")) == (FILE *) NULL) {
             CMmsgPrint(CMmsgSysError, "File (%s) Opening Error in: %s %d", fileName, __FILE__, __LINE__);
             return (DBFault);

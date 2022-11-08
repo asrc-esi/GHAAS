@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
                 perror("Memory Allocation Error in: main ()");
                 return (CMfailed);
             }
-            sprintf (qname, "\"%s\"", optarg);
+            snprintf (qname, strlen(optarg) + 3, "\"%s\"", optarg);
             name = (char *) NULL;
             if ((fieldID = FGetFieldID(buffer, qname)) == FFault) {
                 if ((fieldID = FGetFieldID(buffer, optarg)) == FFault) {

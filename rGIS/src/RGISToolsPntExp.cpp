@@ -18,35 +18,34 @@ int _RGISToolsPointExportARCInfo (DBObjData *data,char *selection)
 	{
 	FILE *file;
 	DBInt pos;
-	char coverName	[11], command    [FILENAME_MAX + 20]; 
+	char coverName[11];
+	char command         [FILENAME_MAX + 20]; 
 	char asciiGenerate   [FILENAME_MAX];
 	char asciiAttribDef  [FILENAME_MAX];
 	char asciiAttribData [FILENAME_MAX];
-	char amlFile    [FILENAME_MAX];
+	char amlFile         [FILENAME_MAX];
 
-	sprintf (asciiGenerate,"%s/asciigen.tmp",selection);
+	snprintf (asciiGenerate,   sizeof(asciiGenerate),   "%s/asciigen.tmp",    selection);
 	if (DBExportARCGenPoint (data,asciiGenerate) == DBFault) return (DBFault);
-	sprintf (asciiAttribDef,"%s/asciiattrib.def",selection);
+	snprintf (asciiAttribDef,  sizeof(asciiAttribDef),  "%s/asciiattrib.def", selection);
 	if (DBExportARCTableDef (data,DBrNItems,asciiAttribDef) == DBFault)
 		{ unlink (asciiGenerate); return (DBFault); }
-	sprintf (asciiAttribData,"%s/asciiattrib.dat",selection);
+	snprintf (asciiAttribData, sizeof(asciiAttribData), "%s/asciiattrib.dat", selection);
 	if (DBExportARCTableData (data,DBrNItems,asciiAttribData) == DBFault)
 		{ unlink (asciiGenerate); unlink (asciiAttribDef); return (DBFault); }
-
 	for (pos = strlen (data->FileName ());pos > 0;pos--) if ((data->FileName ()) [pos] == '/') break;
 	strncpy (coverName,(data->FileName ()) + pos + 1,sizeof (coverName) - 1);
 	coverName	[sizeof (coverName) - 1] = '\0';
 	for (pos = 0;pos < (DBInt) strlen (coverName);++pos) if (coverName [pos] == '.') coverName [pos] = '\0';
 	for (pos = 0;pos < (DBInt) strlen (coverName);++pos) coverName [pos] = tolower (coverName [pos]);
-	sprintf (amlFile,"%s/pntcreate.aml",selection);
-	if ((file = fopen (amlFile,"w")) == NULL)
-		{
+	snprintf (amlFile,          sizeof(amlFile),        "%s/pntcreate.aml",  selection);
+	if ((file = fopen (amlFile,"w")) == NULL) {
 		unlink (asciiGenerate);
 		unlink (asciiAttribDef);
 		unlink (asciiAttribData);
 		CMmsgPrint (CMmsgSysError, "Aml File Creation Error in: %s %d",__FILE__,__LINE__);
 		return (DBFault);
-		}
+	}
 	fprintf (file,"&workspace %s\n",selection);
 	fprintf (file,"generate c_%s\n",coverName);
 	fprintf (file,"input %s\n",asciiGenerate);
@@ -70,15 +69,13 @@ int _RGISToolsPointExportARCInfo (DBObjData *data,char *selection)
 	fprintf (file,"erase c_%s.pattr\ny\n",coverName);
 	fprintf (file,"q stop\n");
 	fclose (file);
-
-	if (getenv ("GHAAS_ARC") != NULL)
-		{
-		sprintf (command,getenv ("GHAAS_ARC"),amlFile);
+	if (getenv ("GHAAS_ARC") != NULL) {
+		snprintf (command, sizeof(command), getenv ("GHAAS_ARC"),amlFile);
 		system (command);
 		unlink (asciiGenerate);
 		unlink (asciiAttribDef);
 		unlink (asciiAttribData);
 		unlink (amlFile);
-		}
-	return (DBSuccess);
 	}
+	return (DBSuccess);
+}

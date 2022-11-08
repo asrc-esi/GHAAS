@@ -135,7 +135,7 @@ int DBImportASCIINet(DBObjData *netData, const char *fileName) {
                 if (gridVal == noData)
                     ((DBInt *) dataRec->Data())[(size_t) pos.Row * (size_t) colNum + (size_t) pos.Col] = DBFault;
                 else {
-                    sprintf(nameSTR, "GHAASCell:%d", cellTable->ItemNum());
+                    snprintf(nameSTR, sizeof(nameSTR), "GHAASCell:%d", cellTable->ItemNum());
                     cellRec = cellTable->Add(nameSTR);
                     positionFLD->Position(cellRec, pos);
                     toCellFLD->Int(cellRec, gridVal);
@@ -154,7 +154,7 @@ int DBImportASCIINet(DBObjData *netData, const char *fileName) {
             }
         }
 Stop:
-    sprintf(nameSTR, "GHAASBasin%d", (DBInt) 0);
+    snprintf(nameSTR, sizeof(nameSTR), "GHAASBasin%d", (DBInt) 0);
     basinRec = basinTable->Add(nameSTR);
     mouthPosFLD->Position(basinRec, positionFLD->Position(cellTable->Item(0)));
     colorFLD->Int(basinRec, 0);

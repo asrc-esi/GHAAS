@@ -327,7 +327,7 @@ DBObjRecord *DBNetworkIF::CellAdd(DBPosition pos) {
 
     if (((DBInt *) DataRec->Data())[(size_t) pos.Row * (size_t) ColNum() + pos.Col] != DBFault) return ((DBObjRecord *) NULL);
 
-    sprintf(nameSTR, "Cell:%6d", CellNum());
+    snprintf(nameSTR, sizeof(nameSTR), "Cell:%6d", CellNum());
     cellRec = CellTable->Add(nameSTR);
     ((DBInt *) DataRec->Data())[(size_t) pos.Row * ColNum() + (size_t) pos.Col] = cellRec->RowID();
     PositionFLD->Position(cellRec, pos);
@@ -578,7 +578,7 @@ DBInt DBNetworkIF::Build() {
         DBPause(70 + i * 10 / CellNum());
         pos = CellPosition(cellRec);
         ((DBInt *) DataRec->Data())[(size_t) pos.Row * (size_t) ColNum() + (size_t) pos.Col] = cellRec->RowID();
-        sprintf(nameStr, "GHAASCell:%d", cellRec->RowID() + 1);
+        snprintf(nameStr, sizeof(nameStr), "GHAASCell:%d", cellRec->RowID() + 1);
         cellRec->Name(nameStr);
     }
     DBPause(80);
@@ -592,7 +592,7 @@ DBInt DBNetworkIF::Build() {
         basinRec = BasinTable->Item(j);
         if ((strncmp(basinRec->Name(), "GHAASBasin", strlen("GHAASBasin")) == 0) ||
             (strlen(basinRec->Name()) < 1)) {
-            sprintf(nameStr, "GHAASBasin%d", basinRec->RowID() + 1);
+            snprintf(nameStr, sizeof(nameStr), "GHAASBasin%d", basinRec->RowID() + 1);
             basinRec->Name(nameStr);
         }
         ColorFLD->Int(basinRec, DBFault);

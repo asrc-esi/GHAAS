@@ -63,7 +63,7 @@ int DBImportARCVector(DBObjData *vecData, const char *arcCov, const char *nameFi
                     }
                     break;
                 case DBTableFieldInt:
-                    sprintf(symbolName, "Symbol:%5d", symbolFLD->Int(record));
+                    snprintf(symbolName, sizeof(symbolName), "Symbol:%5d", symbolFLD->Int(record));
                     if ((symbolRec = (DBObjRecord *) symbols->Item(symbolName)) == NULL) {
                         if ((symbolRec = symbols->Add(symbolName)) == NULL) {
                             CMmsgPrint(CMmsgAppError, "Symbol Object Creation Error in: %s %d", __FILE__, __LINE__);

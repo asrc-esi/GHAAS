@@ -24,12 +24,12 @@ int _RGISToolsLineExportARCInfo (DBObjData *data,char *selection)
 	char asciiAttribData [FILENAME_MAX];
 	char amlFile    [FILENAME_MAX];
 
-	sprintf (asciiGenerate,"%s/asciigen.tmp",selection);
+	snprintf (asciiGenerate,   sizeof(asciiGenerate),   "%s/asciigen.tmp",selection);
 	if (DBExportARCGenLine (data,asciiGenerate) == DBFault) return (DBFault);
-	sprintf (asciiAttribDef,"%s/asciiattrib.def",selection);
+	snprintf (asciiAttribDef,  sizeof(asciiAttribDef),  "%s/asciiattrib.def",selection);
 	if (DBExportARCTableDef (data,DBrNItems,asciiAttribDef) == DBFault)
 		{ unlink (asciiGenerate); return (DBFault); }
-	sprintf (asciiAttribData,"%s/asciiattrib.dat",selection);
+	snprintf (asciiAttribData, sizeof(asciiAttribData), "%s/asciiattrib.dat",selection);
 	if (DBExportARCTableData (data,DBrNItems,asciiAttribData) == DBFault)
 		{ unlink (asciiGenerate); unlink (asciiAttribDef); return (DBFault); }
 
@@ -38,7 +38,7 @@ int _RGISToolsLineExportARCInfo (DBObjData *data,char *selection)
 	coverName	[sizeof (coverName) - 1] = '\0';
 	for (pos = 0;pos < (DBInt) strlen (coverName);++pos) if (coverName [pos] == '.') coverName [pos] = '\0';
 	for (pos = 0;pos < (DBInt) strlen (coverName);++pos) coverName [pos] = tolower (coverName [pos]);
-	sprintf (amlFile,"%s/linecreate.aml",selection);
+	snprintf (amlFile, sizeof(amlFile), "%s/linecreate.aml",selection);
 	if ((file = fopen (amlFile,"w")) == NULL)
 		{
 		unlink (asciiGenerate);
@@ -72,7 +72,7 @@ int _RGISToolsLineExportARCInfo (DBObjData *data,char *selection)
 
 	if (getenv ("GHAAS_ARC") != NULL)
 		{
-		sprintf (command,getenv ("GHAAS_ARC"),amlFile);
+		snprintf (command, sizeof(command), getenv ("GHAAS_ARC"),amlFile);
 		system (command);
 		unlink (asciiGenerate);
 		unlink (asciiAttribDef);

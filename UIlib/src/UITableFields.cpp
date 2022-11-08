@@ -78,7 +78,7 @@ public:
                 XtVaSetValues(DecimalsSWGT, XmNmaximum, width - 3, NULL);
                 break;
         }
-        sprintf(numberString, "%d", width);
+        snprintf(numberString, sizeof(numberString), "%d", width);
         UIAuxSetLabelString(WidthLWGT, numberString);
     }
 
@@ -87,7 +87,7 @@ public:
         switch (NewFieldPTR->Type()) {
             case DBTableFieldInt: {
                 DBInt noData;
-                sprintf(numberString, "%d", NewFieldPTR->IntNoData());
+                snprintf(numberString, sizeof(numberString), "%d", NewFieldPTR->IntNoData());
                 if (strcmp(numberString, string) == 0)return;
                 if (sscanf(string, "%d", &noData) == 1) NewFieldPTR->IntNoData(noData);
                 else XmTextFieldSetString(NodataFWGT, numberString);
@@ -95,7 +95,7 @@ public:
                 break;
             case DBTableFieldFloat: {
                 DBFloat noData;
-                sprintf(numberString, "%f", NewFieldPTR->FloatNoData());
+                snprintf(numberString, sizeof(numberString), "%f", NewFieldPTR->FloatNoData());
                 if (strcmp(numberString, string) == 0)return;
                 if (sscanf(string, "%lf", &noData) == 1) NewFieldPTR->FloatNoData((DBFloat) noData);
                 else XmTextFieldSetString(NodataFWGT, numberString);
@@ -140,12 +140,12 @@ public:
         if (OldFieldPTR->Flags() != NewFieldPTR->Flags()) return (true);
         switch (NewFieldPTR->Type()) {
             case DBTableFieldInt:
-                sprintf(nodataString0, "%d", OldFieldPTR->IntNoData());
-                sprintf(nodataString1, "%d", NewFieldPTR->IntNoData());
+                snprintf(nodataString0, sizeof(nodataString0), "%d", OldFieldPTR->IntNoData());
+                snprintf(nodataString1, sizeof(nodataString1), "%d", NewFieldPTR->IntNoData());
                 break;
             case DBTableFieldFloat:
-                sprintf(nodataString0, "%f", OldFieldPTR->FloatNoData());
-                sprintf(nodataString1, "%f", NewFieldPTR->FloatNoData());
+                snprintf(nodataString0, sizeof(nodataString0), "%f", OldFieldPTR->FloatNoData());
+                snprintf(nodataString1, sizeof(nodataString1), "%f", NewFieldPTR->FloatNoData());
                 break;
             default:
                 return (false);
@@ -505,7 +505,7 @@ void UITableFieldSubForm::Display() {
             XtUnmanageChild(SizeButtonWGTs[1]);
             XtUnmanageChild(SizeButtonWGTs[2]);
             XtVaSetValues(SizeMenuWGT, XmNmenuHistory, SizeButtonWGTs[0], NULL);
-            sprintf(numberString, "%d", NewFieldPTR->FormatWidth());
+            snprintf(numberString, sizeof(numberString), "%d", NewFieldPTR->FormatWidth());
             break;
         case DBTableFieldInt:
             XtVaSetValues(TypeMenuWGT, XmNmenuHistory, TypeButtonWGTs[1], NULL);
@@ -536,9 +536,9 @@ void UITableFieldSubForm::Display() {
                     XtVaSetValues(SizeMenuWGT, XmNmenuHistory, SizeButtonWGTs[2], NULL);
                     break;
             }
-            sprintf(numberString, "%d", NewFieldPTR->IntNoData());
+            snprintf(numberString, sizeof(numberString), "%d", NewFieldPTR->IntNoData());
             XmTextFieldSetString(NodataFWGT, numberString);
-            sprintf(numberString, "%d", value);
+            snprintf(numberString, sizeof(numberString), "%d", value);
             break;
         case DBTableFieldFloat:
             XtVaSetValues(TypeMenuWGT, XmNmenuHistory, TypeButtonWGTs[2], NULL);
@@ -567,9 +567,9 @@ void UITableFieldSubForm::Display() {
                     XtVaSetValues(SizeMenuWGT, XmNmenuHistory, SizeButtonWGTs[2], NULL);
                     break;
             }
-            sprintf(numberString, "%f", NewFieldPTR->FloatNoData());
+            snprintf(numberString, sizeof(numberString), "%f", NewFieldPTR->FloatNoData());
             XmTextFieldSetString(NodataFWGT, numberString);
-            sprintf(numberString, "%d", value);
+            snprintf(numberString, sizeof(numberString), "%d", value);
             break;
         case DBTableFieldDate:
             XtVaSetValues(TypeMenuWGT, XmNmenuHistory, TypeButtonWGTs[3], NULL);
@@ -584,7 +584,7 @@ void UITableFieldSubForm::Display() {
             XtManageChild(SizeButtonWGTs[0]);
             XtUnmanageChild(SizeButtonWGTs[1]);
             XtUnmanageChild(SizeButtonWGTs[2]);
-            sprintf(numberString, "%d", value);
+            snprintf(numberString, sizeof(numberString), "%d", value);
             break;
     }
     XmTextFieldSetString(NameWGT, NewFieldPTR->Name());

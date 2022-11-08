@@ -169,7 +169,7 @@ public:
 DBInt DBImportASCIITable(DBObjTable *table, FILE *fp) {
     DBObjRecord *recordPTR;
     DBObjTableField *fieldFLD;
-    char *buffer = (char *) NULL, format[20], recordName[32];
+    char *buffer = (char *) NULL, format[DBStringLength], recordName[DBStringLength];
     const char *fieldSTR;
     int bufferSize = 0, ret = DBSuccess;
     int recordNum = 0, recordID, fieldID;
@@ -230,7 +230,7 @@ DBInt DBImportASCIITable(DBObjTable *table, FILE *fp) {
                 case DBVariableString:
                     header->Length(fieldID, 0x01 << (int) (ceil(log2((float) header->Length(fieldID) + 1))));
                     format[0] = '%';
-                    sprintf(format + 1, "%ds", header->Length(fieldID) + 1);
+                    snprintf(format + 1, sizeof(format) - 1, "%ds", header->Length(fieldID) + 1);
                     fieldFLD = new DBObjTableField(header->Field(fieldID), header->Type(fieldID), format,
                                                    header->Length(fieldID));
                     break;
@@ -249,10 +249,10 @@ DBInt DBImportASCIITable(DBObjTable *table, FILE *fp) {
         }
 
         strcpy(format, "Record%");
-        sprintf(format + 7, "0%dd", (int) (ceil(log10(recordNum))));
+        snprintf(format + 7, sizeof(format) - 7, "0%dd", (int) (ceil(log10(recordNum))));
 
         for (recordID = 0; recordID < recordNum; recordID++) {
-            sprintf(recordName, format, recordID + 1);
+            snprintf(recordName, sizeof(recordName), format, recordID + 1);
             if ((recordPTR = table->Add(recordName)) == (DBObjRecord *) NULL) {
                 CMmsgPrint(CMmsgAppError, "New Record Addition Error in: %s %d", __FILE__, __LINE__);
                 ret = DBFault;

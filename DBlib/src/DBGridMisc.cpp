@@ -472,7 +472,7 @@ char *DBGridIF::ValueString(DBObjRecord *layerRec, DBPosition pos) {
         case DBTypeGridContinuous: {
             DBFloat cellVal;
             if (Value(layerRec, pos, &cellVal) == false) return ((char *) "");
-            sprintf(retString, ValueFormat(), cellVal);
+            snprintf(retString, sizeof(retString), ValueFormat(), cellVal);
             } break;
         default:
             CMmsgPrint(CMmsgAppError, "Invalid Data Type in: %s %d", __FILE__, __LINE__);
