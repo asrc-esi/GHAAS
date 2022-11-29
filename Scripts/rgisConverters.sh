@@ -38,7 +38,7 @@ function shp2rgisGrid () {
 
    (echo  "1"        # Datatype
     echo "${noData}" # Nodata
-    echo  "0"        # asciia input
+    echo  "0"        # ascii input
     echo "${grid}"
     echo  "0") | grdImport -b "${grid%.gdb*}.grd"
 
