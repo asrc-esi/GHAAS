@@ -235,3 +235,9 @@ int MDReservoir_OperationDef () {
 	MFDefLeaving ("Reservoirs");
 	return (_MDOutResReleaseID); 
 }
+
+int MDReservoir_InflowDef () {
+	if ((_MDOutResInflowID == MFUnset) &&  (MDReservoir_OperationDef () == CMfailed)) return (CMfailed);
+	return (_MDOutResInflowID);
+}
+
