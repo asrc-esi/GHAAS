@@ -112,8 +112,8 @@ int MDWTemp_RiverDef () {
         ((_MDInRouting_RiverWidthID      = MDRouting_RiverWidthDef ())                 == CMfailed) ||
         ((_MDInRouting_Discharge0ID      = MFVarGetID (MDVarRouting_Discharge0,      "m3/s",      MFInput,  MFState, MFInitial))  == CMfailed) ||
         ((_MDInCommon_WindSpeedID        = MFVarGetID (MDVarCommon_WindSpeed,        "m/s",       MFInput,  MFState, MFBoundary)) == CMfailed) ||
-        ((_MDOutWTemp_HeatFluxID         = MFVarGetID (MDVarWTemp_HeatFlux,          "degC*m3/s", MFRoute,  MFState, MFInitial))  == CMfailed) ||
-        ((_MDOutWTemp_HeatFluxNoEquilID  = MFVarGetID (MDVarWTemp_HeatFluxNoEquil,   "degC*m3/s", MFRoute,  MFState, MFInitial))  == CMfailed) ||
+        ((_MDOutWTemp_HeatFluxID         = MFVarGetID (MDVarWTemp_HeatFlux,          "degC*m3/s", MFRoute,  MFState, MFBoundary)) == CMfailed) ||
+        ((_MDOutWTemp_HeatFluxNoEquilID  = MFVarGetID (MDVarWTemp_HeatFluxNoEquil,   "degC*m3/s", MFRoute,  MFState, MFBoundary)) == CMfailed) ||
         ((_MDOutWTemp_EquilTemp   	     = MFVarGetID (MDVarWTemp_EquilTemp,         "degC",      MFOutput, MFState, MFBoundary)) == CMfailed) ||
         ((_MDOutWTemp_EquilTempDiff   	 = MFVarGetID (MDVarWTemp_EquilTempDiff,     "degC",      MFOutput, MFState, MFBoundary)) == CMfailed) ||
         ((_MDOutWTemp_RiverNoEquilID     = MFVarGetID (MDVarWTemp_RiverNoEquil,      "degC",      MFOutput, MFState, MFBoundary)) == CMfailed) ||
