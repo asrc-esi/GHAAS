@@ -4,7 +4,7 @@ GHAAS Water Balance/Transport Model
 Global Hydrological Archive and Analysis System
 Copyright 1994-2023, UNH - ASRC/CUNY
 
-MDInfiltration.c
+MDCore_RainInfiltration.c
 
 bfekete@gc.cuny.edu
 
