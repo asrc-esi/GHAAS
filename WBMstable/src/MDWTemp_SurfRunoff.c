@@ -24,7 +24,7 @@ static void _MDWTempSurfRunoff (int itemID) {
 	float airTemp = MFVarGetFloat (_MDInCommon_AirTemperatureID, itemID, 0.0); // Air temperature degC
 	float surfRunoffTemp;
 
-	surfRunoffTemp = airTemp > 1.5 ? airTemp - 1.5 : (airTemp > 0.0 ? airTemp : 0.0);
+	surfRunoffTemp = airTemp > 1.5 ? airTemp - 1.5 : 0.0;
     MFVarSetFloat (_MDOutWTempSurfROID, itemID, surfRunoffTemp);
 }
 
