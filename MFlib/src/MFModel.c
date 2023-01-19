@@ -122,12 +122,12 @@ static void _MFModelVarPrintOut (const char *label) {
     int varID;
     MFVariable_p var;
 
-    CMmsgPrint (CMmsgInfo, "ID  %10s %30s[%10s] %6s %5s NStep %3s %4s %8s Output", label, "Variable","Unit","Type", "TStep", "Set", "Flux", "Initial");
+    CMmsgPrint (CMmsgInfo, "ID  %10s %30s[%10s] %6s %5s NStep %3s %4s %8s %5s Output", label, "Variable","Unit","Type", "TStep", "Set", "Flux", "Initial", "Route");
     for (var = MFVarGetByID (varID = 1);var != (MFVariable_p) NULL;var = MFVarGetByID (++varID))
         if ((strncmp (var->Name,"__",2) != 0) || var->Initial)
-            CMmsgPrint (CMmsgInfo, "%3i %10s %30s[%10s] %6s %5s %5d %3s %4s %8s %6s",
+            CMmsgPrint (CMmsgInfo, "%3i %10s %30s[%10s] %6s %5s %5d %3s %4s %8s %5s %6s",
                         varID,var->InDate,var->Name,var->Unit,MFVarTypeString (var->Type),MFDateTimeStepString (var->TStep),var->NStep,
-                        CMyesNoString (var->Set),CMyesNoString (var->Flux),CMyesNoString (var->Initial), CMyesNoString (var->OutputPath != (char *) NULL));
+                        CMyesNoString (var->Set),CMyesNoString (var->Flux),CMyesNoString (var->Initial), CMyesNoString(var->Route), CMyesNoString (var->OutputPath != (char *) NULL));
 }
 
 static CMthreadTeam_p _MFModelParse (int argc, char *argv [],int argNum, int (*mainDefFunc) (), char **domainFile, char **startDate, char **endDate, bool *testOnly) {

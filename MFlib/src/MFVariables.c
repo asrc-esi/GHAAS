@@ -223,7 +223,7 @@ double MFVarGetFloat (int id,int itemID,double missingVal) {
 			CMmsgPrint (CMmsgAppError,"Error: Invalid variable [%s,%d] type [%d] in %s:%d\n",var->Name, itemID, var->Type,__FILE__,__LINE__);
 			return (MFDefaultMissingFloat);
 	}
- 	return (var->Flux ? val = val / (double) var->NStep : val);
+ 	return (var->Flux ? val / (double) var->NStep : val);
 }
 
 void MFVarSetInt (int id,int itemID,int val) {

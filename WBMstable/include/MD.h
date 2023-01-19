@@ -352,9 +352,7 @@ extern "C" {
 #define MDVarWTemp_EquilTemp                    "RiverEquilibriumTemp"
 #define MDVarWTemp_EquilTempDiff                "RiverEquilibriumTempDiff"
 #define MDVarWTemp_HeatFlux                     "RiverHeatFlux"
-#define MDVarWTemp_HeatFluxNoEquil              "RiverHeatFluxNoEquil"
 #define MDVarWTemp_River                        "RiverTemperature"
-#define MDVarWTemp_RiverNoEquil                 "RiverTemperatureNoEquil"
 
 // Varying Parameters
 #define MDVarParam_Albedo                       "Albedo"
