@@ -64,28 +64,28 @@ static void _MDWTempRiver (int itemID) {
         float kay;
 
         heatFlux += runoffTemp * runoffFlow * dt;
-        riverTemp = equilTemp = heatFlux / (discharge0 * dt);
+        riverTemp = heatFlux / (discharge0 * dt);
         if (riverTemp > 50.0) {
             CMmsgPrint (CMmsgWarning, "Day: %3d Cell: %10ld River Temperature: %6.1f\n", MFDateGetDayOfYear (), itemID, riverTemp);
-            riverTemp = equilTemp = runoffTemp;
+            riverTemp = runoffTemp;
         }
         // EQUILIBRIUM TEMP MODEL - Edinger et al. 1974: Heat Exchange and Transport in the Environment
-        windFunc = 9.2 + 0.46 * pow (windSpeed,2); // wind function
-        for (i = 0; i < 4; ++i) {
-            float meanTemp;
-            float beta;
-	        meanTemp  = (dewpointTemp + equilTemp) / 2; // mean of rivertemp initial and dew point
-	        beta      = 0.35 + 0.015 * meanTemp + 0.0012 * pow (meanTemp, 2.0); //beta
-	        kay       = 4.50 + 0.050 * equilTemp + (beta + 0.47) * windFunc; // K in W/m2/degC
-	        equilTemp = dewpointTemp + solarRad / kay; // Solar radiation is in W/m2;
-        }
-        equilTempDiff = (equilTemp - riverTemp) * (1.0 - exp (-kay * channelLength * channelWidth / (4181300 * discharge)));
-        riverTemp += equilTempDiff;
-        if (riverTemp < MinTemp) { equilTempDiff += riverTemp - MinTemp; riverTemp = MinTemp; }
-    } else {
-        riverTemp = equilTemp = runoffTemp;
-        equilTempDiff = 0.0;
-    }
+        equilTemp = riverTemp;
+        if (discharge > 0) {
+            windFunc = 9.2 + 0.46 * pow (windSpeed,2); // wind function
+            for (i = 0; i < 4; ++i) {
+                float meanTemp;
+                float beta;
+	            meanTemp  = (dewpointTemp + equilTemp) / 2; // mean of rivertemp initial and dew point
+	            beta      = 0.35 + 0.015 * meanTemp + 0.0012 * pow (meanTemp, 2.0); //beta
+	            kay       = 4.50 + 0.050 * equilTemp + (beta + 0.47) * windFunc; // K in W/m2/degC
+	            equilTemp = dewpointTemp + solarRad / kay; // Solar radiation is in W/m2;
+            }
+            equilTempDiff = (equilTemp - riverTemp) * (1.0 - exp (-kay * channelLength * channelWidth / (4181300 * discharge)));
+            riverTemp += equilTempDiff;
+            if (riverTemp < MinTemp) { equilTempDiff += riverTemp - MinTemp; riverTemp = MinTemp; }
+        } else equilTempDiff = 0.0;
+    } else { riverTemp = equilTemp = runoffTemp; equilTempDiff = 0.0; }
     MFVarSetFloat(_MDOutWTemp_EquilTemp,     itemID, equilTemp);
     MFVarSetFloat(_MDOutWTemp_EquilTempDiff, itemID, equilTempDiff);
     MFVarSetFloat(_MDOutWTemp_RiverID,       itemID, riverTemp);
