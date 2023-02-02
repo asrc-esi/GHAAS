@@ -12,6 +12,8 @@ case "$(uname)" in
     ;;
 esac
 
+export GHAASprocessorNum=$((${GHAASprocessorNum} > 2 ? ${GHAASprocessorNum} - 2 : ${GHAASprocessorNum}))
+
 function GHAASprojectDir () {
     local arg="${1}"; shift;
 
