@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+(
+  [[ -n $ZSH_VERSION && $ZSH_EVAL_CONTEXT =~ :file$ ]] || 
+  [[ -n $KSH_VERSION && "$(cd -- "$(dirname -- "$0")" && pwd -P)/$(basename -- "$0")" != "$(cd -- "$(dirname -- "${.sh.file}")" && pwd -P)/$(basename -- "${.sh.file}")" ]] || 
+  [[ -n $BASH_VERSION ]] && (return 0 2>/dev/null)
+) && sourced=1 || sourced=0
+
 case "$(uname)" in
     (Linux)
         export GHAASprocessorNum=$(nproc)
@@ -1010,7 +1016,7 @@ function RGISstatistics () {
 	return 0
 }
 
-if [[ ${0} == "${BASH_SOURCE}" ]]
+if (( sourced == 0 ))
 then
     if (( $# > 1))
     then
