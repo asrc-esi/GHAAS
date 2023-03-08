@@ -134,11 +134,11 @@ function RGISlookupShadeset () {
     fi
 }
 
-function RGISlookupShadeset () {
+function RGISlookupSampling () {
     local   variable="${1}"; shift
     local vdbVersion="${1}";
 
-    local sampling="$(vdbLookup -s "${variable}" -v "${__RGISarchiveVDBversion}")"
+    local sampling="$(vdbLookup -S "${variable}" -v "${__RGISarchiveVDBversion}")"
     if [[ "${sampling}" == "" ]]
     then
         echo "zone"
