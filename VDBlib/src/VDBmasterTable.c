@@ -511,7 +511,6 @@ const char *VDBshadset (VDBversion version, const char *cfName) {
 const char *VDBsampling (VDBversion version, const char *cfName) {
     int i;
 
-
     switch (version) {
         case VDBversion2:
             for (i = 0; i < VDBrecordNum2; ++i) {
