@@ -8,6 +8,7 @@
 
 if [[ "${GHAASDIR}" == "" ]]; then GHAASDIR="/usr/local/share/ghaas"; fi
 source "${GHAASDIR}/Scripts/RGISfunctions.sh"
+export GDAL_ENABLE_DEPRECATED_DRIVER_ARCGEN=yes
 
 function shp2rgisGrid () {
    local    archive="${1}"; shift
