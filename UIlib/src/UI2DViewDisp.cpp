@@ -583,17 +583,17 @@ void UI2DView::DrawNetwork(DBObjData *data, GC gc) {
         XChangeGC(XtDisplay(DrawingAreaW), gc, GCForeground, &xgcv);
         for (cellID = 0; cellID < netIF->CellNum(); ++cellID) {
             cellRec = netIF->Cell(cellID);
-            if (((cellRec->Flags() & DBObjectFlagSelected) == DBObjectFlagSelected) &&
-                (netIF->Cell(netIF->CellPosition(cellRec)) != (DBObjRecord *) NULL)) {
-                if (basinID != netIF->CellBasinID(cellRec)) {
-                    basinID = netIF->CellBasinID(cellRec);
-                    basinRec = netIF->Basin(cellRec);
-                    if ((basinRec != (DBObjRecord *) NULL) && (ActiveEXT.InRegion(data->Extent(basinRec)) == false)) {
+            if ((cellRec = netIF->Cell(netIF->CellPosition(cellRec))) == (DBObjRecord *) NULL) continue;
+            if ((cellRec->Flags() & DBObjectFlagSelected) == DBObjectFlagSelected) {
+                if ((basinRec = netIF->Basin(cellRec)) == (DBObjRecord *) NULL) continue;
+                if (basinID != basinRec->RowID ()) {
+                    basinID = basinRec->RowID ();
+                    if (ActiveEXT.InRegion(data->Extent(basinRec)) == false) {
                         cellID += netIF->CellBasinCells(cellRec) - 1;
                         continue;
                     }
                 }
-                DrawNetworkCellBox(netIF, cellRec, gc);
+                else DrawNetworkCellBox(netIF, cellRec, gc);
             }
         }
 
@@ -602,17 +602,17 @@ void UI2DView::DrawNetwork(DBObjData *data, GC gc) {
         basinID = DBFault;
         for (cellID = 0; cellID < netIF->CellNum(); ++cellID) {
             cellRec = netIF->Cell(cellID);
-            if (netIF->Cell(netIF->CellPosition(cellRec)) == (DBObjRecord *) NULL) continue;
+            if ((cellRec = netIF->Cell(netIF->CellPosition(cellRec))) == (DBObjRecord *) NULL) continue;
 
-            if (basinID != netIF->CellBasinID(cellRec)) {
-                basinID = netIF->CellBasinID(cellRec);
-                basinRec = netIF->Basin(cellRec);
-                if ((basinRec != (DBObjRecord *) NULL) && (ViewEXT.InRegion(data->Extent(basinRec)) == false)) {
+            if ((basinRec = netIF->Basin(cellRec)) == (DBObjRecord *) NULL) continue;
+            if (basinID != basinRec->RowID ()) {
+                basinID = basinRec->RowID ();
+                if (ActiveEXT.InRegion(data->Extent(basinRec)) == false) {
                     cellID += netIF->CellBasinCells(cellRec) - 1;
                     continue;
                 }
             }
-            DrawNetworkCell(netIF, cellRec, displayColor, displayMode, gc);
+            else DrawNetworkCell(netIF, cellRec, displayColor, displayMode, gc);
         }
     }
     delete netIF;
@@ -661,20 +661,21 @@ void UI2DView::Draw() {
             if ((data->Flags() & DBDataFlagDisplay) == DBDataFlagDisplay)
                 switch (data->Type()) {
                     case DBTypeVectorPoint:
-                        DrawPoints(data, gc);
+                        if (data->Visible (MapScale)) DrawPoints(data, gc);
                         break;
                     case DBTypeVectorLine:
-                        DrawLines(data, gc);
+                        if (data->Visible (MapScale)) DrawLines(data, gc);
                         break;
                     case DBTypeVectorPolygon:
-                        DrawPolygons(data, gc);
+                        if (data->Visible (MapScale)) DrawPolygons(data, gc);
                         break;
                     case DBTypeGridDiscrete:
                     case DBTypeGridContinuous:
-                        DrawGrid(data, gc);
+                        if (data->Visible (MapScale)) DrawGrid(data, gc);
                         break;
                     case DBTypeNetwork:
-                        DrawNetwork(data, gc);
+                        if (data->Visible (MapScale))
+                            DrawNetwork(data, gc);
                         break;
                     default:
                         break;
