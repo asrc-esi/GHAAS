@@ -7,7 +7,7 @@ Copyright 1994-2023, UNH - ASRC/CUNY
 CMDtblAddIdXY.cpp
 
 zachary.tessler@asrc.cuny.edu
-bfekete@gc.cuny.edu
+bfekete@ccny.cuny.edu
 
 *******************************************************************************/
 

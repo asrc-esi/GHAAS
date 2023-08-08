@@ -6,7 +6,7 @@ Copyright 1994-2023, UNH - ASRC/CUNY
 
 cmArgParse.c
 
-bfekete@gc.cuny.edu
+bfekete@ccny.cuny.edu
 
 *******************************************************************************/
 #include <string.h>

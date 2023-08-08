@@ -6,7 +6,7 @@ Copyright 1994-2023, UNH - ASRC/CUNY
 
 Flib.h
 
-bfekete@gc.cuny.edu
+bfekete@ccny.cuny.edu
 
 *******************************************************************************/
 

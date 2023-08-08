@@ -6,7 +6,7 @@ Copyright 1994-2023, UNH - ASRC/CUNY
 
 RGISWorkspace.cpp
 
-bfekete@gc.cuny.edu
+bfekete@ccny.cuny.edu
 
 *******************************************************************************/
 
