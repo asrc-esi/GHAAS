@@ -6,7 +6,7 @@ ENTRYPOINT [ "/bin/bash" ]
 # Auxiliary RGIS build container
 FROM base AS rgisbuild
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive \
-    apt-get install -y --no-install-recommends git cmake clang make libnetcdf-dev libudunits2-dev libgdal-dev libexpat1-dev libxext-dev libmotif-dev
+    apt-get install -y --no-install-recommends git cmake clang make libshp-dev libnetcdf-dev libudunits2-dev libgdal-dev libexpat1-dev libxext-dev libmotif-dev
 RUN git clone https://github.com/bmfekete/RGIS /tmp/RGIS && /tmp/RGIS/install.sh /usr/local/share && rm -rf /tmp/RGIS
 
 # RGIS container

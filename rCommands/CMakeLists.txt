@@ -11,14 +11,14 @@ grdCycleMean grdDateLayers grdDifference grdExtractLayers grdHeatIndex grdImport
 grdSeasonAggr grdSeasonMean grdTimeSeries grdTSAggr grdZoneHist grdZoneStats netAccumulate netBasinDistrib netBasinHist netBasinProf netBasinStats netBuild
 netcdf2ds netcdf2rgis netCells2Grid netCellSearch netCellSlopes netConfluence netCreatePnts netDefragment netErosion netImportASCII netInvAccum netStreamlines netSubset netTransfer
 netPourElevation netPotReservoir netTrim netUnaccumulate netUpstreamAvg pntGridSampling pntGridValue pntStationDist pntSTNChar pntSTNCoord pntSubbasCenter pntSubbasHist pntSubbasins pntSubbasStats
-pntSymbolField rgis2ascii rgis2domain rgis2ds rgis2netcdf rgis2mapper rgis2sql rgis2table rgisMetadb setHeader setProperties table2rgis tblAddField tblAddXY tblCalculate tblConv2Point
+pntSymbolField rgis2ascii rgis2domain rgis2ds rgis2netcdf rgis2mapper rgis2shp rgis2sql rgis2table rgisMetadb setHeader setProperties table2rgis tblAddField tblAddXY tblCalculate tblConv2Point
 tblConvCoord tblDecimalDate tblDeleteField tblDeleteRec tblIdleRec tblJoinTables tblMergeCoord tblMergeDate tblMJoinTables tblRedefField tblSelectRec vdbLookup
 tblSortRec tblSplitDate tblStatistics tblTopoCalc )
 	add_executable(${loop_var} src/CMD${loop_var}.cpp)
 	if(${CMAKE_HOST_APPLE})
-		target_link_libraries(${loop_var} LINK_PUBLIC VDB30 RG30 MF30 DB30 CM30 -lnetcdf -ludunits2 -lm)
+		target_link_libraries(${loop_var} LINK_PUBLIC VDB30 RG30 MF30 DB30 CM30 -lnetcdf -ludunits2 -lshp -lm)
 	else(${CMAKE_HOST_APPLE})
-		target_link_libraries(${loop_var} LINK_PUBLIC VDB30 RG30 MF30 DB30 CM30 -lnetcdf -ludunits2 -lm -pthread)
+		target_link_libraries(${loop_var} LINK_PUBLIC VDB30 RG30 MF30 DB30 CM30 -lnetcdf -ludunits2 -lshp -lm -pthread)
 	endif(${CMAKE_HOST_APPLE})
 	install (TARGETS ${loop_var} RUNTIME DESTINATION ghaas/bin)
 endforeach(loop_var)
