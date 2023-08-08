@@ -141,8 +141,8 @@ Widget UIInitialize(char *title, char *icon, char *helpFile, UIMenuItem mainMenu
     XtRealizeWidget(_UITopLevel);
     _UIColorInitialize(_UITopLevel);
 
-    pixmap = XmGetPixmap(XtScreen(UITopLevel()), (char *) "GHAASasrc.xpm", foreground, background);
-    ccnyLogo = XtVaCreateManagedWidget("GHAASMainUNHLogo", xmLabelWidgetClass, mainForm,
+    pixmap = XmGetPixmap(XtScreen(UITopLevel()), (char *) "GHAASccny.xpm", foreground, background);
+    ccnyLogo = XtVaCreateManagedWidget("GHAASMainCCNYLogo", xmLabelWidgetClass, mainForm,
                                        XmNlabelType, XmPIXMAP,
                                        XmNlabelPixmap, pixmap,
                                        XmNmarginWidth, 0,
@@ -165,7 +165,7 @@ Widget UIInitialize(char *title, char *icon, char *helpFile, UIMenuItem mainMenu
                             XmNbottomOffset, 5,
                             NULL);
     pixmap = XmGetPixmap(XtScreen(UITopLevel()), (char *) "GHAASlogo.xpm", foreground, background);
-    ghaasLogo = XtVaCreateManagedWidget("GHAASMainUNHLogo", xmLabelWidgetClass, mainForm,
+    ghaasLogo = XtVaCreateManagedWidget("GHAASMainGHAASLogo", xmLabelWidgetClass, mainForm,
                                         XmNlabelType, XmPIXMAP,
                                         XmNlabelPixmap, pixmap,
                                         XmNrightAttachment, XmATTACH_FORM,
