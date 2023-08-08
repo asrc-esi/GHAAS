@@ -2,7 +2,7 @@
 
 GHAAS Database library V3.0
 Global Hydrological Archive and Analysis System
-Copyright 1994-2023, UNH - ASRC/CUNY
+Copyright 1994-2023, UNH - CCNY
 
 DB.H
 
@@ -2167,6 +2167,7 @@ DBInt DBExportDMGrid(DBObjData *, const char *);
 
 DBInt DBExportNetCDF(DBObjData *, const char *);
 
+DBInt DBExportShapefile(DBObjData *, const char *);
 
 DBInt DBPointInRange(DBObjData *, DBInt, DBRegion *);
 

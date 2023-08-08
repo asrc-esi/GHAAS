@@ -88,8 +88,8 @@ function rgisFile2gpkg {
 	    ;;
 	    (gdbp|gdbp.gz|gdbl|gdbl.gz)
 		    [ "${extension%.gz}" == gdbp ] && DATATYPE="POINT" || DATATYPE="LINESTRING"
-		    rgis2ascii "${rgisFile}" "${tmpFile}.asc"
-		    ogr2ogr -update -overwrite -a_srs EPSG:4326 -f "GPKG" -nln "geom" "${tmpFile}.gpkg" "${tmpFile}.asc"
+		    rgis2shp -o "${tmpFile}" "${rgisFile}"
+		    ogr2ogr -update -overwrite -a_srs EPSG:4326 -f "GPKG" -nln "geom" "${tmpFile}.gpkg" "${tmpFile}.shp"
 		    rgis2sql -c "sensitive" -a "DBItems" -s "${schema}" -q "${tblName}" -d "sqlite" -r off "${rgisFile}" |\
 		    sqlite3 "${tmpFile}.gpkg"
 		    _GPKGsql "${schema}" "${tblName}" "ID" "fid" > "${tmpFile}.sql"

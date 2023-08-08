@@ -2,7 +2,7 @@
 
 GHAAS RiverGIS Utilities V3.0
 Global Hydrological Archive and Analysis System
-Copyright 1994-2023, UNH - ASRC/CUNY
+Copyright 1994-2023, UNH - CCNY
 
 CMDrgis2ascii.cpp
 
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
 
     data = new DBObjData();
     ret = (argNum > 1) && (strcmp(argv[1], "-") != 0) ? data->Read(argv[1]) : data->Read(stdin);
-    if ((ret == DBFault) || (((data->Type () != DBTypeGridContinuous) && (data->Type () != DBTypeGridDiscrete) && (data->Type() != DBTypeNetwork) && (data->Type() != DBTypeVectorPoint) && (data->Type() != DBTypeVectorLine)))) {
+    if ((ret == DBFault) || ((data->Type () != DBTypeGridContinuous) && (data->Type () != DBTypeGridDiscrete) && (data->Type() != DBTypeNetwork) && (data->Type() != DBTypeVectorPoint) && (data->Type() != DBTypeVectorLine))) {
         delete data;
         return (CMfailed);
     }

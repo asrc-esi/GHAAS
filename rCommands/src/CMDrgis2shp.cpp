@@ -2,7 +2,7 @@
 
 GHAAS RiverGIS Utilities V3.0
 Global Hydrological Archive and Analysis System
-Copyright 1994-2023, UNH - ASRC/CUNY
+Copyright 1994-2023, UNH - CCNY
 
 CMDrgis2shp.cpp
 
@@ -18,18 +18,13 @@ bfekete@ccny.cuny.edu
 DBInt DBNetworkExportASCIIGridDir (DBObjData *,FILE *);
 
 static void _CMDprintUsage (const char *arg0) {
-    CMmsgPrint(CMmsgInfo, "%s [options] <rgis file> <ascii file>", CMfileName(arg0));
-    CMmsgPrint(CMmsgInfo, "     -a, --all");
-    CMmsgPrint(CMmsgInfo, "     -l, --layer [layername]");
-    CMmsgPrint(CMmsgInfo, "     -i, --list");
-    CMmsgPrint(CMmsgInfo, "     -n, --num");
+    CMmsgPrint(CMmsgInfo, "     -o, --output [ESRI shapefile]");
     CMmsgPrint(CMmsgInfo, "     -h, --help");
 }
 
 int main(int argc, char *argv[]) {
-    FILE *outFile;
     int argPos, argNum = argc, ret;
-    char *layerName = (char *) NULL;
+    char *fileName = (char *) NULL;
     int doList = false, doNum = false, doAll = true;
     DBInt layerID;
     DBObjData *data;
@@ -37,30 +32,12 @@ int main(int argc, char *argv[]) {
     DBGridIF    *gridIF;
     
     for (argPos = 1; argPos < argNum;) {
-        if (CMargTest (argv[argPos], "-a", "--all")) {
-            argNum = CMargShiftLeft(argPos, argv, argNum);
-            doAll = true;
-            continue;
-        }
-        if (CMargTest (argv[argPos], "-i", "--list")) {
-            argNum = CMargShiftLeft(argPos, argv, argNum);
-            doList = true;
-            doAll  = false;
-            continue;
-        }
-        if (CMargTest (argv[argPos], "-n", "--num")) {
-            argNum = CMargShiftLeft(argPos, argv, argNum);
-            doNum = true;
-            doAll = false;
-            continue;
-        }
-        if (CMargTest (argv[argPos], "-l", "--layer")) {
+        if (CMargTest (argv[argPos], "-o", "--output")) {
             if ((argNum = CMargShiftLeft(argPos, argv, argNum)) <= argPos) {
-                CMmsgPrint(CMmsgUsrError, "Missing layerName!");
+                CMmsgPrint(CMmsgUsrError, "Missing shapefile name!");
                 return (CMfailed);
             }
-            layerName = argv[argPos];
-            doAll = false;
+            fileName = argv[argPos];
             if ((argNum = CMargShiftLeft(argPos, argv, argNum)) <= argPos) break;
             continue;
         }
@@ -80,59 +57,19 @@ int main(int argc, char *argv[]) {
         _CMDprintUsage (argv[0]);
         return (CMfailed);
     }
-    if (((doList || doNum) && (doAll || (layerName != (char *) NULL))) ||
-        (doAll & (layerName != (char *) NULL))) {
-        CMmsgPrint(CMmsgUsrError, "Conflicting options!");
-        _CMDprintUsage (argv[0]);
-        return (CMfailed);
-    }
 
     data = new DBObjData();
     ret = (argNum > 1) && (strcmp(argv[1], "-") != 0) ? data->Read(argv[1]) : data->Read(stdin);
-    if ((ret == DBFault) || (((data->Type () != DBTypeGridContinuous) && (data->Type () != DBTypeGridDiscrete) && (data->Type() != DBTypeNetwork) && (data->Type() != DBTypeVectorPoint) && (data->Type() != DBTypeVectorLine)))) {
+    if ((ret == DBFault) || ((data->Type() != DBTypeVectorPoint) && (data->Type() != DBTypeVectorLine))) {
         delete data;
         return (CMfailed);
     }
-
-    if ((outFile = (argNum > 2) && (strcmp(argv[2], "-") != 0) ? fopen(argv[2], "w") : stdout) == (FILE *) NULL) {
-        CMmsgPrint(CMmsgUsrError, "Output file opening error!");
-        return (CMfailed);
-    }
-
+ 
     switch (data->Type ()) {
-        case DBTypeGridContinuous:
-        case DBTypeGridDiscrete:
-            gridIF = new DBGridIF(data);
-            if (doNum)  { fprintf(outFile, "%d", gridIF->LayerNum()); }
-            if (doList) {
-                for (layerID = 0; layerID < gridIF->LayerNum(); ++layerID) {
-                    layerRec = gridIF->Layer(layerID);
-                    fprintf(outFile, "%s", layerRec->Name());
-                }
-                ret = CMsucceeded;
-            }
-            if (doAll) {
-                for (layerID = 0; layerID < gridIF->LayerNum(); ++layerID) {
-                    layerRec = gridIF->Layer(layerID);
-                    if ((ret = DBExportARCGridLayer(data, layerRec, outFile)) == CMfailed) break;
-                }
-            }
-            else if (layerName != (char *) NULL) {
-                if ((layerRec = gridIF->Layer(layerName)) == (DBObjRecord *) NULL) {
-                    CMmsgPrint(CMmsgUsrError, "Wrong layername");
-                    ret = CMfailed;
-                }
-                else ret = DBExportARCGridLayer(data, layerRec, outFile);
-            }
-            delete gridIF;
-            break;
-        case DBTypeVectorPoint: ret = DBExportARCGenPoint (data,outFile); break;
-        case DBTypeVectorLine:  ret = DBExportARCGenLine  (data,outFile); break;
+        case DBTypeVectorPoint:
+        case DBTypeVectorLine:  ret = DBExportShapefile (data,fileName == (char *) NULL ? "RGIS_Shapefile" : fileName); break;
         case DBTypeVectorPolygon: break;
-        case DBTypeNetwork:     ret = DBNetworkExportASCIIGridDir (data, outFile); break;
     }
-
-    if (argNum > 2) fclose(outFile);
 
     delete data;
     return (ret);
