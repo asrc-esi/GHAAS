@@ -95,7 +95,7 @@ function rgisFile2gpkg {
 		    sqlite3 "${tmpFile}.gpkg"
 		    _GPKGsql "${schema}" "${tblName}" "ID" "fid" > "${tmpFile}.sql"
 		    ogr2ogr -update -overwrite -nln "${schema}_${tblName}" -nlt "${DATATYPE}" -dialect "sqlite" -sql "@${tmpFile}.sql" "${gpkgFile}" "${tmpFile}.gpkg"
-		    # rm "${tmpFile}".*
+		    rm "${tmpFile}".*
  	    ;;
 	    (gdbd|gdbd.gz)
 		    rgis2ascii "${rgisFile}" "${tmpFile}.grd"
@@ -114,8 +114,8 @@ function rgisFile2gpkg {
 	    (gdbc|gdbc.gz|.nc)
     	    [ -e "${gpkgFile}" ] && [ "${mode}" == "append" ] && (echo "DROP TABLE IF EXISTS \"${schema}_${tblName}\"" | sqlite3  "${gpkgFile}")
             rgis2netcdf "${rgisFile}" "${tmpFile}.nc"
-            gdal_translate -a_srs "EPSG:4326" -of Rasterlite "${tmpFile}.nc" RASTERLITE:"${gpkgFile}",table="${schema}_${tblName}"
-            rm "${tmpFile}.nc" "${tmpFile}.tif"
+            gdal_translate -a_srs "EPSG:4326" -of Rasterlite "${tmpFile}.nc" "RASTERLITE:${gpkgFile},table=${schema}_${tblName}"
+            rm "${tmpFile}.nc"
 	    ;;
     	(*)
 	    	echo "Unrecognised extension: ${extension}"
