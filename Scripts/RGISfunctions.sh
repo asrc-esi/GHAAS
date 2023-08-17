@@ -307,6 +307,33 @@ function RGISgeoResolutionInSecond () {
     return 0
 }
 
+function RGISminOrder () {
+	  	case "${resolution}" in
+   	(03sec|7p50s)
+		echo "6"
+	;;
+	(15sec|30sec)
+		echo "5"
+	;;
+	(45sec|01min|1m30s)
+		echo "4"
+	;;
+	(2m30s|03min|3m45s|05min|06min)
+		echo "3"
+	;;
+	(7m30s|10min|15min)
+		echo "2"
+	;;
+	(30min|60min|02deg)
+		echo "1"
+	;;
+	(*)
+		echo "Invalid resolution" > /dev/stderr
+		return 1
+	;;
+	esac
+}
+
 function RGISgeoResolutionMultiplier () { # Destination resolution is devided by source resolution. Decimals ar chapped off.
     local srcRes="$(RGISgeoResolutionInSecond "${1}")"; shift
     local dstRes="$(RGISgeoResolutionInSecond "${1}")"; shift
