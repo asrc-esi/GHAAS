@@ -89,15 +89,17 @@ function rgisFile2gpkg {
 	    (gdbp|gdbp.gz|gdbl|gdbl.gz)
 		    [ "${extension%.gz}" == gdbp ] && DATATYPE="POINT" || DATATYPE="LINESTRING"
 		    rgis2shp -o "${tmpFile}" "${rgisFile}"
+            [[ -e "${tmpFile}.shp" ]] || ( echo "Shapefile creation error from: ${rgisFile}"; return 0 )
 		    ogr2ogr -update -overwrite -a_srs EPSG:4326 -f "GPKG" -nln "geom" "${tmpFile}.gpkg" "${tmpFile}.shp"
 		    rgis2sql -c "sensitive" -a "DBItems" -s "${schema}" -q "${tblName}" -d "sqlite" -r off "${rgisFile}" |\
 		    sqlite3 "${tmpFile}.gpkg"
 		    _GPKGsql "${schema}" "${tblName}" "ID" "fid" > "${tmpFile}.sql"
 		    ogr2ogr -update -overwrite -nln "${schema}_${tblName}" -nlt "${DATATYPE}" -dialect "sqlite" -sql "@${tmpFile}.sql" "${gpkgFile}" "${tmpFile}.gpkg"
-		    rm "${tmpFile}".*
+		    # rm "${tmpFile}".*
  	    ;;
 	    (gdbd|gdbd.gz)
 		    rgis2ascii "${rgisFile}" "${tmpFile}.grd"
+            [[ -e "${tmpFile}.grd" ]] || ( echo "ASCII grid creation error"; return 0 )
 		    gdal_translate -a_srs EPSG:4326 "${tmpFile}.grd" "${tmpFile}.tif"
 		    gdal_polygonize.py "${tmpFile}.tif" -f "GPKG" "${tmpFile}.gpkg" "full_geom"
 		    ogr2ogr -update -overwrite -nlt POLYGON -dialect sqlite \
