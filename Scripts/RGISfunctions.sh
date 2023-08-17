@@ -307,7 +307,7 @@ function RGISgeoResolutionInSecond () {
     return 0
 }
 
-function RGISminOrder () {
+function RGISminimumOrder () {
 	  	case "${resolution}" in
    	(03sec|7p50s)
 		echo "6"
