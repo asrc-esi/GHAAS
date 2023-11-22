@@ -1,4 +1,3 @@
-project(rCommands)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
 		            ${CMAKE_CURRENT_SOURCE_DIR}/../VDBlib/include
 		            ${CMAKE_CURRENT_SOURCE_DIR}/../CMlib/include

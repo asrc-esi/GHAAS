@@ -1,0 +1,12 @@
+project(nRouting)
+FILE(GLOB sources src/*.c)
+add_executable(nRouting ${sources})
+target_include_directories(nRouting PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ../CMlib/include)
+if(${CMAKE_HOST_APPLE})
+	target_link_libraries(nRouting CM30 -lexpat -ludunits2 -lm)
+else(${CMAKE_HOST_APPLE})
+	target_link_libraries(nRouting CM30 -lexpat -ludunits2 -lm -pthread)
+endif(${CMAKE_HOST_APPLE})
+project(ncRouting)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
