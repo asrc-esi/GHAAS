@@ -148,7 +148,7 @@ void Initialize_PsTaylor(NFcontext_p context) {
     context->Parameters = parameters;
     context->VariableNum = NFvariableNum  (variables);
     context->Variables = variables;
-    context->UserDataSize = sizeof(HamonData_t);          // User's responsibility
+    context->UserDataSize = sizeof(PsTaylorData_t);          // User's responsibility
 }
 
 void Execute_PsTaylor(void *userData) {
