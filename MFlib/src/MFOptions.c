@@ -2,7 +2,7 @@
 
 GHAAS Water Balance Model Library V1.0
 Global Hydrological Archive and Analysis System
-Copyright 1994-2023, UNH - CCNY
+Copyright 1994-2024, UNH - CCNY
 
 MFOptions.c
 

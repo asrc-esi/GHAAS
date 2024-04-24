@@ -2,7 +2,7 @@
 
 GHAAS Water Balance/Transport Model
 Global Hydrological Archive and Analysis System
-Copyright 1994-2023, UNH - CCNY
+Copyright 1994-2024, UNH - CCNY
 
 MDAux_AccBalance.c
 
@@ -35,6 +35,7 @@ static void _MDAux_AccumBalance (int itemID)
 	float sMoistChg       = MFVarGetFloat (_MDInAux_AccSMoistChgID,     itemID, 0.0); // Soil moisture change [m3/s]
 	float grdWatChg       = MFVarGetFloat (_MDInAux_AccGrdWatChgID,     itemID, 0.0); // Groundwater change [m3/s]
 	float riverStorageChg = MFVarGetFloat (_MDInAux_AccRiverStorageChg, itemID, 0.0); // River storage Change [m3/s]
+
 
 	MFVarSetFloat(_MDOutAux_AccBalanceID, itemID, precip - evap - runoff - snowPackChg - sMoistChg - grdWatChg);
 }

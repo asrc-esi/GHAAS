@@ -2,7 +2,7 @@
 
 GHAAS Database library V3.0
 Global Hydrological Archive and Analysis System
-Copyright 1994-2023, UNH - CCNY
+Copyright 1994-2024, UNH - CCNY
 
 DBPredefList.cpp
 
