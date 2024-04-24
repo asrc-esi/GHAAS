@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 AS base
+FROM ubuntu:22.04 AS base
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive \
     apt-get install -y tzdata gnupg gnupg-utils lsb-release wget ca-certificates apt-transport-https curl screen bc
 ENTRYPOINT [ "/bin/bash" ]
