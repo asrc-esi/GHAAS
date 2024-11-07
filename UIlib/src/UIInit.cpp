@@ -173,7 +173,7 @@ Widget UIInitialize(char *title, char *icon, char *helpFile, UIMenuItem mainMenu
                                         XmNbottomAttachment, XmATTACH_FORM,
                                         XmNbottomOffset, 5,
                                         NULL);
-    string = XmStringCreate((char *) "Global Hydrologicalal Archive and Analysis System", UICharSetNormal);
+    string = XmStringCreate((char *) "Global Hydrological Archive and Analysis System", UICharSetNormal);
     XtVaCreateManagedWidget("GHAASLabel", xmLabelWidgetClass, mainForm,
                             XmNlabelString, string,
                             XmNtopAttachment, XmATTACH_OPPOSITE_WIDGET,
