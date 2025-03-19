@@ -11,19 +11,10 @@ static void _MDAux_BankfullDischarge(int itemID) {
     float z_score = 3.0;
     float bankfullDischarge;
     
-// testing max:mean ratios
-//    if (meanDischarge >= 1000) {
-//        factor = 5;
-    // } else if (meanDischarge >= 100) {
-    //     factor = 8;
-    // } else if (meanDischarge >= 10) {
-    //     factor = 9;
-    // } else {
-    //     factor = 25;
-    // }
-// Define bankfull discharge as z-score of 3, rearranged here
+
+// Define bankfull discharge as z-score of 3
 // The mean discharge condition excludes very small streams with small orders of magnitude,
-// as these tend to cause issues. This also prevents bankfull from activating during the first few days
+// as these tend to cause issues. This also prevents bankfull from activating during the first few days of spinup
     if (meanDischarge > 1) bankfullDischarge = z_score * dischargeStdDev + meanDischarge;
     else bankfullDischarge = 999999999.0;
 
