@@ -55,6 +55,9 @@ extern "C" {
 #define MDVarAux_DischargeMax                   "MaximumLongTermInflow"
 #define MDVarAux_StepCounter                    "StepCounter"
 #define MDVarAux_YearCount                      "YearCount"
+#define MDVarAux_BankfullDischarge              "BankfullDischarge"
+#define MDVarAux_DischargeStdDev                "DischargeStdDev"
+#define MDVarAux_SumSqDiffDev                   "SumSqDiff"
 
 // Common variables
 #define MDVarCommon_AirTemperature              "AirTemperature"
@@ -201,6 +204,7 @@ extern "C" {
 #define MDVarRouting_RiverStorage               "RiverStorage"
 #define MDVarRouting_RiverStorageChg            "RiverStorageChange"
 #define MDVarRouting_RiverWidth                 "RiverWidth"
+#define MDVarRouting_FloodPlain                 "FloodPlain"
 
 // Sediment variable
 #define MDVarSediment_BedloadEquation           "BedloadEquation"
@@ -412,6 +416,9 @@ int MDAux_DischargeMeanDef ();
 int MDAux_DischargeMinDef ();
 int MDAux_DischargeMaxDef ();
 int MDAux_RunoffMeanDef ();
+int MDAux_BankfullDischargeDef ();
+int MDAux_DischargeStdDevDef ();
+int MDAux_SumSqDiffDef ();
 
 int MDCommon_AirTemperatureDef ();
 int MDCommon_CloudCoverDef ();
@@ -495,6 +502,7 @@ int MDRouting_ChannelDischargeMuskingumCoeffDef ();
 int MDRouting_DischargeUptakeDef ();
 int MDRouting_RiverShapeExponentDef ();
 int MDRouting_RiverWidthDef ();
+int MDRouting_FloodPlainDef();
 
 int MDReservoir_OperationDef ();
 int MDReservoir_InflowDef ();
